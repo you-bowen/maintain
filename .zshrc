@@ -10,7 +10,6 @@ bindkey -s '\e\e' '\C-asudo \C-e'
 ZSH_THEME="ys"
 
 plugins=(git
-autojump
 zsh-autosuggestions
 zsh-syntax-highlighting
 )
