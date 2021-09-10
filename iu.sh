@@ -17,10 +17,43 @@ echo "1. ctf"
 echo "2. docker"
 echo "3. git"
 echo "4. ubt Desktop essential"
+echo "5. zsh (twice)"
 read -p "input your options(eg: '012'):" options
 
+tips(){
+    clear
+    echo $1
+}
+zsh(){
+    ohmyzsh(){
+        echo "installing zsh..."
+        markDone "ohmyzsh"
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    }
+    plugins(){
+        repos_dir="$HOME/.oh-my-zsh/repos_zsh"
+        mkdir "$repos_dir"
+        # autosuggestions
+        #   site: https://github.com/zsh-users/zsh-autosuggestions
+        cd "$repos_dir" && git clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
 
+        # syntax-highlighting
+        #   site: https://github.com/zsh-users/zsh-syntax-highlighting
+        cd "$repos_dir" && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
 
+        # autojump
+        #   site: https://github.com/wting/autojump
+        # cd "$repos_dir" && git clone git://github.com/wting/autojump.git
+        # cd autojump && python3 install.py
+
+        # get .zshrc file
+        curl "https://raw.githubusercontent.com/you-bowen/maintain/master/.zshrc" > "$HOME/.zshrc"
+        echo "=====please source your .zshrc!!!======"
+    }
+    jumpIfDone "ohmyzsh" ohmyzsh
+    plugins
+    tips "please run 'source ~/.zshrc'"
+}
 base(){
     core(){
         echo "installing base modules..."
@@ -33,44 +66,8 @@ base(){
         sudo chmod a+x "/usr/bin/vscode"
         markDone "base_core"
     }
-    zsh(){
-        ohmyzsh(){
-            echo "installing zsh..."
-            markDone "ohmyzsh"
-            sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-        }
-        plugins(){
-            repos_dir="$HOME/.oh-my-zsh/repos_zsh"
-            mkdir "$repos_dir"
-            # autosuggestions
-            #   site: https://github.com/zsh-users/zsh-autosuggestions
-            cd "$repos_dir" && git clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
-
-            # syntax-highlighting
-            #   site: https://github.com/zsh-users/zsh-syntax-highlighting
-            cd "$repos_dir" && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
-
-            # autojump
-            #   site: https://github.com/wting/autojump
-            # cd "$repos_dir" && git clone git://github.com/wting/autojump.git
-            # cd autojump && python3 install.py
-
-            # get .zshrc file
-            curl "https://raw.githubusercontent.com/you-bowen/maintain/master/.zshrc" > "$HOME/.zshrc"
-            echo "=====please source your .zshrc!!!======"
-        }
-        jumpIfDone "ohmyzsh" ohmyzsh
-        plugins
-    }
-    tips(){
-        clear
-        echo -e "maybe you need to do the things below:\n\n"
-        echo "1. source ~/.zshrc"
-        echo "2. systemctl enable ssh"
-    }
     jumpIfDone "base_core" core 
-    zsh
-    tips
+    tips "you can run:  systemctl enable ssh"
 }
 ctf(){
     echo "1. pwn"
@@ -190,5 +187,6 @@ if [[ $options =~ "0" ]];then base;     fi
 if [[ $options =~ "1" ]];then ctf;      fi
 if [[ $options =~ "2" ]];then docker;   fi
 if [[ $options =~ "3" ]];then GIT;      fi
-if [[ $options =~ "4" ]];then Desktop;   fi
+if [[ $options =~ "4" ]];then Desktop;  fi
+if [[ $options =~ "5" ]];then zsh;      fi
 
