@@ -56,7 +56,7 @@ base(){
             # cd autojump && python3 install.py
 
             # get .zshrc file
-            curl "https://raw.githubusercontent.com/you-bowen/dotfiles/master/.zshrc" > "$HOME/.zshrc"
+            curl "https://raw.githubusercontent.com/you-bowen/maintain/master/.zshrc" > "$HOME/.zshrc"
             echo "=====please source your .zshrc!!!======"
         }
         jumpIfDone "ohmyzsh" ohmyzsh
