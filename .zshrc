@@ -8,8 +8,7 @@ alias idax64="cd ~/ida && ./linux_server64"
 alias pwn="code ~/pwn"
 # for ubuntu Desktop
 # for m1 MACbook
-
-
+alias pd="prlctl start"
 # for WSL2
 export User="27564"
 export Desktop="/mnt/c/Users/$User/Desktop"
