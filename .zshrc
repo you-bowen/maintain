@@ -1,8 +1,10 @@
 export ZSH="$HOME/.oh-my-zsh"
 alias proxyOff="https_proxy='' http_proxy='' all_proxy=''"
 alias proxyOn="https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890"
+alias pchain="proxychains"
 alias google="curl google.com"
 alias baidu="curl baidu.com"
+# for pwn
 alias idax86="cd ~/ida && ./linux_server"
 alias idax64="cd ~/ida && ./linux_server64"
 alias pwn="code ~/pwn"

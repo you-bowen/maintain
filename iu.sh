@@ -3,7 +3,7 @@
 # 定义变量 a='test' 中间没有空格
 
 install_info="$HOME/.ubt_install_info"
-jumpIfDone(){
+jumpIfDoneElseDo(){
     # 如果文件里没有$1的字符串 就执行$2
     if [ ! $(cat "$install_info" | grep "$1") ] ; then $2 ; fi
 }
@@ -50,14 +50,14 @@ zsh(){
         curl "https://raw.githubusercontent.com/you-bowen/maintain/master/.zshrc" > "$HOME/.zshrc"
         echo "=====please source your .zshrc!!!======"
     }
-    jumpIfDone "ohmyzsh" ohmyzsh
+    jumpIfDoneElseDo "ohmyzsh" ohmyzsh
     plugins
     tips "please run 'source ~/.zshrc'"
 }
 base(){
     core(){
         echo "installing base modules..."
-        sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop ssh python3-pip gcc neovim git
+        sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop ssh python3-pip gcc neovim git proxychains
         sudo vim /etc/ssh/sshd_config
         sudo service ssh restart
         sudo ln -s /usr/bin/python3 /usr/bin/python
@@ -66,7 +66,7 @@ base(){
         sudo chmod a+x "/usr/bin/vscode"
         markDone "base_core"
     }
-    jumpIfDone "base_core" core 
+    jumpIfDoneElseDo "base_core" core 
     tips "you can run:  systemctl enable ssh"
 }
 ctf(){
@@ -79,11 +79,6 @@ ctf(){
     echo "installing ctf modules..."
 
     base(){
-        # x86 support
-        sudo dpkg --add-architecture i386
-        sudo apt-get update
-        sudo apt-get dist-upgrade
-        sudo apt-get install -y libc6:i386
         # pwntools gdb
         sudo apt-get install -y python3 python3-pip python3-dev git libssl-dev libffi-dev build-essential gdb gdb-multiarch
         markDone "ctf_base" 
@@ -157,10 +152,18 @@ ctf(){
         # binwalk
         sudo apt-get install -y binwalk 
     }
-    jumpIfDone "ctf_base" base 
+    x86(){
+        # x86 support
+        sudo dpkg --add-architecture i386
+        sudo apt-get update
+        sudo apt-get dist-upgrade
+        sudo apt-get install -y libc6:i386
+    }
+    jumpIfDoneElseDo "ctf_base" base 
     if [[ $options =~ "1" ]];then pwn;      fi
     if [[ $options =~ "2" ]];then re;       fi
     if [[ $options =~ "3" ]];then firmware; fi
+    if [[ $options =~ "3" ]];then x86;      fi
 
 
 
@@ -181,6 +184,13 @@ Desktop(){
     
     echo "installing FiraCode"
     sudo apt install fonts-firacode
+}
+mac_essencial(){
+    echo "make sure you have brew installed on your mac!"
+    # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    brew install curl wget neofetch git
+    brew install --cask docker
+
 }
 # if cat "$install_info" | grep -q "main_base"; then base ; fi
 if [[ $options =~ "0" ]];then base;     fi
