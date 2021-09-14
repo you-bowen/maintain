@@ -4,6 +4,7 @@ alias proxyOn="https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:789
 alias pchain="proxychains"
 alias google="curl google.com"
 alias baidu="curl baidu.com"
+alias updateZsh="cat ~/maintain/.zshrc > ~/.zshrc && source ~/.zshrc && echo 'ok!'"
 # for pwn
 alias idax86="cd ~/ida && ./linux_server"
 alias idax64="cd ~/ida && ./linux_server64"
