@@ -58,6 +58,7 @@ base(){
     core(){
         echo "installing base modules..."
         sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop ssh python3-pip gcc neovim git proxychains sudo ssh
+        sudo apt-get install -y iproute2 net-tools
         sudo vim /etc/ssh/sshd_config
         sudo service ssh restart
         sudo ln -s /usr/bin/python3 /usr/bin/python

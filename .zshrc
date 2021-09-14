@@ -6,8 +6,8 @@ alias google="curl google.com"
 alias baidu="curl baidu.com"
 alias updateZsh="cat ~/maintain/.zshrc > ~/.zshrc && source ~/.zshrc && echo 'ok!'"
 # for pwn
-alias idax86="cd ~/ida && ./linux_server"
-alias idax64="cd ~/ida && ./linux_server64"
+alias idax86="cd ~/pwn/server && ./linux_server"
+alias idax64="cd ~/pwn/server && ./linux_server64"
 alias pwn="code ~/pwn"
 # for ubuntu Desktop
 # for m1 MACbook
