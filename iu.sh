@@ -74,6 +74,7 @@ ctf(){
     echo "1. pwn"
     echo "2. re"
     echo "3. firmware"
+    echo "4. x86 suppport"
 
     read -p "input your options(eg: '012'):" options
 
@@ -164,7 +165,7 @@ ctf(){
     if [[ $options =~ "1" ]];then pwn;      fi
     if [[ $options =~ "2" ]];then re;       fi
     if [[ $options =~ "3" ]];then firmware; fi
-    if [[ $options =~ "3" ]];then x86;      fi
+    if [[ $options =~ "4" ]];then x86;      fi
 
 
 
