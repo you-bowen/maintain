@@ -1,0 +1,60 @@
+#!/usr/bin/python3
+# -*- coding:utf-8 -*-
+
+import json
+import os
+import sys
+import platform
+
+is_linux = "Linux" in platform.platform()
+is_WSL2 = "WSL2" in platform.platform()
+is_Mac = "mac" in platform.platform()
+filename = sys.argv[1]
+snipName, suffix = filename.split('.')
+langDict = {'py': 'python',
+            'c': 'c',
+            'cpp': 'cpp',
+            'html': 'html',
+            'js': 'javascript',
+            'vue': 'vue',
+            'css': 'css',
+            'json': 'json',
+            'sh': 'shellscript'}
+
+if suffix in langDict.keys():
+    lang = langDict[suffix]
+else:
+    print('{} is not included in your vscode snippets'.format(suffix))
+    exit()
+
+if is_Mac:
+    path = r'/Users/{}/Library/Application Support/Code/User/snippets/{}.json'.format(os.getlogin(),lang)
+elif is_linux:
+    if is_WSL2:
+        path = r'/mnt/c/Users/27564/AppData/Roaming/Code/User/snippets/{}.json'.format(lang)
+    else:
+        path = r"/home/{}/.config/Code - Insiders/User/snippets/{}.json".format(os.getlogin(), lang)
+else:
+    path = r'C:\Users\{}\AppData\Roaming\Code\User\snippets\{}.json'.format(os.getlogin(), lang)
+
+try:
+    # print(path)
+    with open(path) as f:
+        data = json.load(f)
+except:
+    print("请删除对应json文件中的注释，json.load(f)不能解析注释内容！")
+    exit()
+
+with open(filename, encoding='utf-8') as f:
+    content = f.read()
+    new = {}
+    new['prefix'] = snipName
+    new['body'] = content.split('\n')
+    new['description'] = 'template for {}'.format(snipName)
+
+data[snipName] = new
+if content == 'DEL\n':  # 删除对应snippet就在文件中输入'DEL\n'
+    data.pop(snipName)
+
+with open(path, 'w') as f:
+    f.write(json.dumps(data, indent=4))
