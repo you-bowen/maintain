@@ -43,8 +43,8 @@ zsh(){
 
         # autojump
         #   site: https://github.com/wting/autojump
-        # cd "$repos_dir" && git clone git://github.com/wting/autojump.git
-        # cd autojump && python3 install.py
+        cd "$repos_dir" && git clone git://github.com/wting/autojump.git
+        cd autojump && python3 install.py
 
         # get .zshrc file
         curl "https://raw.githubusercontent.com/you-bowen/maintain/master/.zshrc" > "$HOME/.zshrc"
