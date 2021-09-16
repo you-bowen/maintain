@@ -75,6 +75,7 @@ ctf(){
     echo "2. re"
     echo "3. firmware"
     echo "4. x86 suppport"
+    echo "5. Penetration"
 
     read -p "input your options(eg: '012'):" options
 
@@ -161,11 +162,24 @@ ctf(){
         sudo apt-get dist-upgrade
         sudo apt-get install -y libc6:i386
     }
+    pene(){
+        repos_dir="$HOME/repos_firmware" 
+        mkdir "$repos_dir"
+        # sqlmap
+        cd "$repos_dir" && git clone https://github.com/sqlmapproject/sqlmap
+        # oneForAll
+        cd "$repos_dir" && git clone https://github.com/shmilylty/OneForAll
+        # JsFinder
+        cd "$repos_dir" && git clone https://github.com/Threezh1/JSFinder
+        # dirsearch
+        cd "$repos_dir" && git clone https://github.com/maurosoria/dirsearch
+    }
     jumpIfDoneElseDo "ctf_base" base 
     if [[ $options =~ "1" ]];then pwn;      fi
     if [[ $options =~ "2" ]];then re;       fi
     if [[ $options =~ "3" ]];then firmware; fi
     if [[ $options =~ "4" ]];then x86;      fi
+    if [[ $options =~ "5" ]];then pene;     fi
 
 
 
