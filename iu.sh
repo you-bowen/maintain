@@ -31,15 +31,14 @@ zsh(){
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     }
     plugins(){
-        repos_dir="$HOME/.oh-my-zsh/repos_zsh"
-        mkdir "$repos_dir"
+        repos_dir="$HOME/.oh-my-zsh/custom/plugins/"
         # autosuggestions
         #   site: https://github.com/zsh-users/zsh-autosuggestions
-        cd "$repos_dir" && git clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+        cd "$repos_dir" && git clone https://github.com/zsh-users/zsh-autosuggestions 
 
         # syntax-highlighting
         #   site: https://github.com/zsh-users/zsh-syntax-highlighting
-        cd "$repos_dir" && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+        cd "$repos_dir" && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git 
 
         # autojump
         #   site: https://github.com/wting/autojump
