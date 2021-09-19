@@ -11,12 +11,13 @@ alias update="cd ~/maintain && git pull"
 alias ggg="gaa && gcmsg ".." && gp"
 # for ubuntu Desktop
 # for m1 MACbook
-if [[ $UNAME =~ "Mac" ]]
+if [[ $UNAME =~ "Darwin" ]]
 then
     echo "U are using Mac! I know."
     alias pd="prlctl start"
     alias python3="/opt/homebrew/bin/python3"
     alias pip3="/opt/homebrew/bin/pip3"
+    alias burp="cd ~/Desktop/BurpSuite2020.12 && ./BURP.sh &"
 fi
 # for WSL2
 if [[ $UNAME =~ "WSL2" ]]
