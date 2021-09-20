@@ -1,0 +1,7 @@
+#!/usr/bin/python3
+import sys
+from googletrans import Translator
+
+translator = Translator()
+tranlated = translator.translate(sys.stdin.read(), dest='zh-CN')
+print(tranlated.text)
