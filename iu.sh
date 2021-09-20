@@ -60,10 +60,11 @@ base(){
         sudo apt-get install -y iproute2 net-tools
         sudo vim /etc/ssh/sshd_config
         sudo service ssh restart
-        sudo ln -s /usr/bin/python3 /usr/bin/python
-        curl "https://raw.githubusercontent.com/you-bowen/pytoys/main/tools/vscode.py" > vscode && chmod a+x vscode
-        sudo mv vscode /usr/bin/
-        sudo chmod a+x "/usr/bin/vscode"
+        sudo ln -s /usr/bin/python3 /usr/bin/python # mac中无效
+        # install my tools
+        sudo ln -s ~/maintain/tools/* /usr/local/bin/
+        sudo chmod a+x /usr/local/bin/*
+        
         markDone "base_core"
     }
     jumpIfDoneElseDo "base_core" core 

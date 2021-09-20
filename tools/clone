@@ -1,0 +1,35 @@
+#!/usr/bin/python3
+import requests as r
+from lxml import etree
+import json
+import os
+import sys
+
+if len(sys.argv) < 2:
+    print("usage: clone <repo_name> / clone -s <your_repo>")
+    exit()
+if "-s" in sys.argv: # --self
+    os.system(f"git clone https://github.com/you-bowen/{sys.argv[-1]}")
+else:
+    url = f'https://github.com/search?q={sys.argv[-1]}'
+
+    resp = r.get(url).text
+    html = etree.HTML(resp)
+
+    results = []
+    for i in range(1,6):
+        j = html.xpath(f'//*[@id="js-pjax-container"]/div/div[3]/div/ul/li[{i}]/div[2]/div[1]/div[1]/a/@href')
+        results.append(j[0])
+
+    for id,i in enumerate(results):
+        print(f"{id}. {i}")
+
+    choice = input(f"clone 0st by default({results[0]}):")
+
+    if choice!="":
+        res = results[int(choice)]
+    else:
+        res = results[0]
+
+    os.system(f"git clone https://github.com{res}")
+

@@ -17,7 +17,7 @@ then
     alias pd="prlctl start"
     alias python3="/opt/homebrew/bin/python3"
     alias pip3="/opt/homebrew/bin/pip3"
-    alias burp="cd ~/Desktop/BurpSuite2020.12 && ./BURP.sh &"
+    alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
 fi
 # for WSL2
 if [[ $UNAME =~ "WSL2" ]]
