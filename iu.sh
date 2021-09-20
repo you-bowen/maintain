@@ -32,21 +32,13 @@ zsh(){
     }
     plugins(){
         repos_dir="$HOME/.oh-my-zsh/custom/plugins/"
-        # autosuggestions
-        #   site: https://github.com/zsh-users/zsh-autosuggestions
-        cd "$repos_dir" && git clone https://github.com/zsh-users/zsh-autosuggestions 
+        # plugins: zsh-autosuggestions; zsh-syntax-highlighting; autojump
+        clone -d "zsh-autosuggestions" "$repos_dir" 
+        clone -d "zsh-syntax-highlighting" "$repos_dir"
+        clone -d "autojump" "$repos_dir"
+        cd "$repos_dir/autojump" && python3 install.py
 
-        # syntax-highlighting
-        #   site: https://github.com/zsh-users/zsh-syntax-highlighting
-        cd "$repos_dir" && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git 
-
-        # autojump
-        #   site: https://github.com/wting/autojump
-        cd "$repos_dir" && git clone git://github.com/wting/autojump.git
-        cd autojump && python3 install.py
-
-        # get .zshrc file
-        curl "https://raw.githubusercontent.com/you-bowen/maintain/master/.zshrc" > "$HOME/.zshrc"
+        rm ~/.zshrc && ln -s $HOME/maintain/.zshrc $HOME
         echo "=====please source your .zshrc!!!======"
     }
     jumpIfDoneElseDo "ohmyzsh" ohmyzsh

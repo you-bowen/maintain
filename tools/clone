@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument('-s','--self',  action="store_true", help="get your own repos")
 parser.add_argument('-d','--direct',action="store_true", help="directly clone")
-parser.add_argument('-t','--to',    action="store",      help="destination")
+parser.add_argument('-f','--follow',action="store_true", help="follow 2 dest")
 parser.add_argument("repo",help="repo_name",type=str)
 parser.add_argument("dest",help="destination",type=str,nargs='?',default="")
 args = parser.parse_args()
@@ -20,6 +20,7 @@ args = parser.parse_args()
 def clone(url):
     path = j(args.dest, url.split('/')[-1])
     os.system(' '.join([url,path]))
+
 
 if args.self: # --self
     clone(f"git clone https://github.com/you-bowen/{args.repo}")
