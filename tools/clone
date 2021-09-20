@@ -4,18 +4,25 @@ from lxml import etree
 import os
 import argparse
 
+j = os.path.join
 parser = argparse.ArgumentParser(
     description="make your clone EASY!",
-    usage="clone [-*] [repo]"
+    usage="clone [-*] [repo] [dest]"
 )
 parser.add_argument('-s','--self',  action="store_true", help="get your own repos")
 parser.add_argument('-d','--direct',action="store_true", help="directly clone")
+parser.add_argument('-t','--to',    action="store",      help="destination")
 parser.add_argument("repo",help="repo_name",type=str)
+parser.add_argument("dest",help="destination",type=str,nargs='?',default="")
 args = parser.parse_args()
 
 
+def clone(url):
+    path = j(args.dest, url.split('/')[-1])
+    os.system(' '.join([url,path]))
+
 if args.self: # --self
-    os.system(f"git clone https://github.com/you-bowen/{args.repo}")
+    clone(f"git clone https://github.com/you-bowen/{args.repo}")
 else:
     url = f'https://github.com/search?q={args.repo}'
 
@@ -35,4 +42,4 @@ else:
         choice = input(f"clone 0st by default({results[0]}):")
         res = results[int(choice)] if choice!="" else results[0]
     
-    os.system(f"git clone https://github.com{res}")
+    clone(f"git clone https://github.com{res}")
