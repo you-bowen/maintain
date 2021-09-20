@@ -14,8 +14,6 @@ parser.add_argument("repo",help="repo_name",type=str)
 args = parser.parse_args()
 
 
-
-
 if args.self: # --self
     os.system(f"git clone https://github.com/you-bowen/{args.repo}")
 else:
@@ -29,8 +27,6 @@ else:
         j = html.xpath(f'//*[@id="js-pjax-container"]/div/div[3]/div/ul/li[{i}]/div[2]/div[1]/div[1]/a/@href')
         results.append(j[0])
 
-
-
     if args.direct:
         res = results[0]
     else:
@@ -40,4 +36,3 @@ else:
         res = results[int(choice)] if choice!="" else results[0]
     
     os.system(f"git clone https://github.com{res}")
-
