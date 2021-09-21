@@ -10,7 +10,7 @@ alias baidu="curl baidu.com"
 alias idax86="cd ~/ida && ./linux_server"
 alias idax64="cd ~/ida && ./linux_server64"
 alias pwn="code ~/pwn"
-alias update="cd ~/maintain && git pull"
+alias update="cd ~/maintain && git pull && ln -s ~/maintain/tools/* /usr/local/bin"
 alias ggg="gaa && gcmsg ".." && gp"
 # for ubuntu Desktop
 # for m1 MACbook

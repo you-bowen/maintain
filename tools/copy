@@ -1,0 +1,5 @@
+#!/usr/bin/python3
+import pyperclip as ppc
+import sys
+ppc.copy(sys.stdin.read())
+print("copied.")
