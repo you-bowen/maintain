@@ -26,9 +26,6 @@ fi
 if [[ $UNAME =~ "WSL2" ]]
 then
     echo "U are using WSL2! I know."
-    export User="27564"
-    export Desktop="/mnt/c/Users/$User/Desktop"
-    export Downloads="/mnt/c/Users/$User/Downloads"
     alias pwncp="cp /mnt/c/Users/27564/Desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
 fi
 # hacker
