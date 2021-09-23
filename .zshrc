@@ -6,9 +6,9 @@ alias proxyon="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.
 alias pchain="proxychains4"
 alias google="curl google.com"
 alias baidu="curl baidu.com"
-
-alias idax86="cd ~/ida && ./linux_server"
-alias idax64="cd ~/ida && ./linux_server64"
+alias pmod="chmod a+x *" # power mod
+alias idax86="cd ~/pwn/server && ./linux_server"
+alias idax64="cd ~/pwn/server && ./linux_server64"
 alias pwn="code ~/pwn"
 alias update="cd ~/maintain && git pull && sudo ln -s ~/maintain/tools/* /usr/local/bin"
 alias ggg="gaa && gcmsg ".." && gp"
@@ -26,9 +26,6 @@ fi
 if [[ $UNAME =~ "WSL2" ]]
 then
     echo "U are using WSL2! I know."
-    export User="27564"
-    export Desktop="/mnt/c/Users/$User/Desktop"
-    export Downloads="/mnt/c/Users/$User/Downloads"
     alias pwncp="cp /mnt/c/Users/27564/Desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
 fi
 # hacker
