@@ -6,9 +6,9 @@ alias proxyon="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.
 alias pchain="proxychains4"
 alias google="curl google.com"
 alias baidu="curl baidu.com"
-
-alias idax86="cd ~/ida && ./linux_server"
-alias idax64="cd ~/ida && ./linux_server64"
+alias pmod="chmod a+x *" # power mod
+alias idax86="cd ~/pwn/server && ./linux_server"
+alias idax64="cd ~/pwn/server && ./linux_server64"
 alias pwn="code ~/pwn"
 alias update="cd ~/maintain && git pull && sudo ln -s ~/maintain/tools/* /usr/local/bin"
 alias ggg="gaa && gcmsg ".." && gp"
