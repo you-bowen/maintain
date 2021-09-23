@@ -1,0 +1,81 @@
+#!/usr/bin/python3
+from rich.console import Console
+from rich.syntax import Syntax
+import sys
+console = Console()
+
+
+data = {
+    "mov":"""
+    mov rdi, rsi                    | 把 rsi 中的 数据 赋值给rdi
+    mov rdi, [rsi+8]                | 把'rsi+8'这个<内存地址>里面的 数据 赋值给rdi
+    mov eax, dword ptr ds:[ebp-4]   | 这个是od里面的写法<dword ptr ds:>这个东西可以不看
+    mov eax, 401000                 | eax = 0x401000 同 lea eax,[0x401000] 
+    """,
+
+    "lea":"""
+    lea eax, [ebx+8]        | 把'ebx+8'这个<值>直接赋给 eax
+    lea eax, [0x401000]     | eax = 0x401000 同 mov eax,401000  
+    lea eax, ds:[0x401000]  | 这个是od里面的写法<ds:>这个东西可以不看
+    """,
+
+    "cmp":"""
+    cmp op1, op2    | op1 - op2 # 不对结果进行赋值
+    """,
+
+    "sub":"""
+    sub op1, op2    | op1 <- (op1 - op2) # 对结果进行赋值
+    """,
+
+    "test":"""
+    test op1, op2   | op1 & op2 # 不对结果进行赋值
+    """,
+
+    "and":"""
+    and op1, op2    | op1 <- (op1 & op2) # 对结果进行赋值
+    """,
+
+    "call":"""
+    call = push <pc+1> && jmp <op1>
+    """,
+
+    "flag":"""
+    CF:     进位标志✅
+    ZF:     0标志✅
+    PF:     奇偶标志
+    AF:     辅助进位标志
+    SF:     符号标志
+    OF:     溢出标志
+    """,
+
+    "regs":"""
+    数据寄存器          
+        EAX 累加器/返回值        
+        EBX 基地址寄存器   
+        ECX 计数寄存器     
+        EDX 数据寄存器
+    变址寄存器   
+        ESI
+        EDI 常用于记录字符串的长度
+    指针寄存器
+        ESP-栈顶
+        EBP-栈底
+    """
+}
+
+tips = """
+    tips: MOV OP1<目的操作数>, OP2<源操作数>
+        要是有什么 赋值 的运算的话 也大多都是 op1 <- (op1 · op2)
+"""
+def ppprint(content):
+    syntax = Syntax(content, "python", theme="monokai", line_numbers=True)
+    console.print(syntax)
+
+if len(sys.argv) > 1:
+    for i,keyword in enumerate(sys.argv):
+        if keyword in data:
+            ppprint(data[keyword])
+        else:
+            pass
+else:
+    print("usage: asm <keywords_u_want_2_know>")
