@@ -34,8 +34,10 @@ else:
     results = []
     for i in range(1,6):
         ele = html.xpath(f'//*[@id="js-pjax-container"]/div/div[3]/div/ul/li[{i}]/div[2]/div[1]/div[1]/a/@href')
-        results.append(ele[0])
-
+        try:
+            results.append(ele[0])
+        except:
+            break
     if args.direct:
         res = results[0]
     else:
