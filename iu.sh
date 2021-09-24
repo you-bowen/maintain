@@ -18,6 +18,7 @@ echo "2. docker"
 echo "3. git"
 echo "4. ubt Desktop essential"
 echo "5. zsh (twice)"
+echo "6. nvim (plugins)"
 read -p "input your options(eg: '012'):" options
 
 tips(){
@@ -193,6 +194,9 @@ Desktop(){
     echo "installing FiraCode"
     sudo apt install fonts-firacode
 }
+NVIM(){
+    curl -sLf https://spacevim.org/install.sh | bash
+}
 mac_essencial(){
     echo "make sure you have brew installed on your mac!"
     # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -207,4 +211,4 @@ if [[ $options =~ "2" ]];then docker;   fi
 if [[ $options =~ "3" ]];then GIT;      fi
 if [[ $options =~ "4" ]];then Desktop;  fi
 if [[ $options =~ "5" ]];then zsh;      fi
-
+if [[ $options =~ "6" ]];then NVIM;     fi
