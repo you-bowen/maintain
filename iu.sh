@@ -1,51 +1,22 @@
 #!/bin/bash
 
 # 定义变量 a='test' 中间没有空格
-
 install_info="$HOME/.ubt_install_info"
-jumpIfDoneElseDo(){
-    # 如果文件里没有$1的字符串 就执行$2
-    if [ ! $(cat "$install_info" | grep "$1") ] ; then $2 ; fi
-}
-markDone(){
-    echo "$1" >> "$install_info"
-}
+jumpIfDoneElseDo()  { if [ ! $(cat "$install_info" | grep "$1") ] ; then $2 ; fi }
+markDone()          { echo "$1" >> "$install_info"; }
+tips()              { clear;echo $1; }
+menu()              { id=0;for i in $@;do echo $id. $i;((id++));done;read -p "input your options(eg: '012'):" options; }
+exec_choice()       { id=0;for i in $@;do if [[ $options =~ "$id" ]];then $i;fi;((id++));done }
 
 echo "" >> "$install_info"
-echo "0. base"
-echo "1. ctf"
-echo "2. docker"
-echo "3. git"
-echo "4. ubt Desktop essential"
-echo "5. zsh (twice)"
-echo "6. nvim (plugins)"
-read -p "input your options(eg: '012'):" options
+menu "base"\
+     "ctf"\
+     "docker"\
+     "git"\
+     "ubt_Desktop_essential"\
+     "zsh(twice)"\
+     "nvim(plugins)"
 
-tips(){
-    clear
-    echo $1
-}
-zsh(){
-    ohmyzsh(){
-        echo "installing zsh..."
-        markDone "ohmyzsh"
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    }
-    plugins(){
-        repos_dir="$HOME/.oh-my-zsh/custom/plugins/"
-        # plugins: zsh-autosuggestions; zsh-syntax-highlighting; autojump
-        clone -d "zsh-autosuggestions" "$repos_dir" 
-        clone -d "zsh-syntax-highlighting" "$repos_dir"
-        clone -d "autojump" "$repos_dir"
-        cd "$repos_dir/autojump" && python3 install.py
-
-        rm ~/.zshrc && ln -s $HOME/maintain/.zshrc $HOME
-        echo "=====please source your .zshrc!!!======"
-    }
-    jumpIfDoneElseDo "ohmyzsh" ohmyzsh
-    plugins
-    tips "please run 'source ~/.zshrc'"
-}
 base(){
     core(){
         echo "installing base modules..."
@@ -61,25 +32,15 @@ base(){
         markDone "base_core"
     }
     jumpIfDoneElseDo "base_core" core 
-    tips "you can run:  systemctl enable ssh"
+    echo "you can run:  systemctl enable ssh"
 }
 ctf(){
-    echo "1. pwn"
-    echo "2. re"
-    echo "3. firmware"
-    echo "4. x86 suppport"
-    echo "5. Penetration"
-
-    read -p "input your options(eg: '012'):" options
-
-    echo "installing ctf modules..."
-
+    menu "base" "pwn" "re" "firmware" "x86 suppport" "Penetration"
     base(){
         # pwntools gdb
         sudo apt-get install -y python3 python3-pip python3-dev git libssl-dev libffi-dev build-essential gdb gdb-multiarch
         markDone "ctf_base" 
     }
-
     pwn(){
         # repos_pwn
         repos_dir="$HOME/repos_pwn" 
@@ -168,17 +129,44 @@ ctf(){
         cd "$repos_dir" && git clone https://github.com/maurosoria/dirsearch
     }
     jumpIfDoneElseDo "ctf_base" base 
-    if [[ $options =~ "1" ]];then pwn;      fi
-    if [[ $options =~ "2" ]];then re;       fi
-    if [[ $options =~ "3" ]];then firmware; fi
-    if [[ $options =~ "4" ]];then x86;      fi
-    if [[ $options =~ "5" ]];then pene;     fi
-
-
-
+    funcs=(base pwn re firmware x86 pene)
+    exec_choice ${funcs[*]}
 }
 docker(){
-    echo "installing docker...(wait 2 write)"
+    menu "base" "change_source" "portainer" "netdata" "nps"
+    base(){ read -p "for linux user!" xxx; curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun; }
+    change_source(){ echo "tobe written"; }
+    portainer(){
+        sudo docker run -d -p 9000:9000 -p 8000:8000 \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            --restart unless-stopped \
+            --name portainer portainer/portainer-ce
+    }
+    netdata(){
+        sudo docker run -d --name=netdata \
+            -p 19999:19999 \
+            -v netdataconfig:/etc/netdata \
+            -v netdatalib:/var/lib/netdata \
+            -v netdatacache:/var/cache/netdata \
+            -v /etc/passwd:/host/etc/passwd:ro \
+            -v /etc/group:/host/etc/group:ro \
+            -v /proc:/host/proc:ro \
+            -v /sys:/host/sys:ro \
+            -v /etc/os-release:/host/etc/os-release:ro \
+            --restart unless-stopped \
+            --cap-add SYS_PTRACE \
+            --security-opt apparmor=unconfined \
+            netdata/netdata
+    }
+    nps(){
+        read -p "prepare ~/nps/conf first! or you can't continue" xxx
+        sudo docker run -d --name nps --net=host \
+            -v ~/nps/conf:/conf \
+            ffdfgdfg/nps
+    }
+    funcs=(base change_source portainer netdata nps)
+    exec_choice ${funcs[*]}
+
 }
 GIT(){
     ssh-keygen -t rsa -C "2756456886@qq.com"
@@ -194,9 +182,28 @@ Desktop(){
     echo "installing FiraCode"
     sudo apt install fonts-firacode
 }
-NVIM(){
-    curl -sLf https://spacevim.org/install.sh | bash
+zsh(){
+    ohmyzsh(){
+        echo "installing zsh..."
+        markDone "ohmyzsh"
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    }
+    plugins(){
+        repos_dir="$HOME/.oh-my-zsh/custom/plugins/"
+        # plugins: zsh-autosuggestions; zsh-syntax-highlighting; autojump
+        clone -d "zsh-autosuggestions" "$repos_dir" 
+        clone -d "zsh-syntax-highlighting" "$repos_dir"
+        clone -d "autojump" "$repos_dir"
+        cd "$repos_dir/autojump" && python3 install.py
+
+        rm ~/.zshrc && ln -s $HOME/maintain/.zshrc $HOME
+        echo "=====please source your .zshrc!!!======"
+    }
+    jumpIfDoneElseDo "ohmyzsh" ohmyzsh
+    plugins
+    echo "please run 'source ~/.zshrc'"
 }
+NVIM(){ curl -sLf https://spacevim.org/install.sh | bash; }
 mac_essencial(){
     echo "make sure you have brew installed on your mac!"
     # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -204,11 +211,5 @@ mac_essencial(){
     brew install --cask docker
 
 }
-# if cat "$install_info" | grep -q "main_base"; then base ; fi
-if [[ $options =~ "0" ]];then base;     fi
-if [[ $options =~ "1" ]];then ctf;      fi
-if [[ $options =~ "2" ]];then docker;   fi
-if [[ $options =~ "3" ]];then GIT;      fi
-if [[ $options =~ "4" ]];then Desktop;  fi
-if [[ $options =~ "5" ]];then zsh;      fi
-if [[ $options =~ "6" ]];then NVIM;     fi
+funcs=(base ctf docker GIT Desktop zsh NVIM)
+exec_choice ${funcs[*]}

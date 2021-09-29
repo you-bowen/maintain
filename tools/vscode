@@ -38,7 +38,7 @@ else:
     path = r'C:\Users\{}\AppData\Roaming\Code\User\snippets\{}.json'.format(os.getlogin(), lang)
 
 try:
-    # print(path)
+    print(path)
     with open(path) as f:
         data = json.load(f)
 except:
