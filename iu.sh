@@ -15,10 +15,10 @@ menu "base"\
      "git"\
      "ubt_Desktop_essential"\
      "zsh(twice)"\
-     "nvim(plugins)"\
-     "install_tools"
-     
+     "nvim(plugins)"
+
 base(){
+    menu "core" "install_my_tools" "github_sshkey"
     core(){
         echo "installing base modules..."
         sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop ssh python3-pip gcc neovim git proxychains sudo ssh
@@ -26,8 +26,12 @@ base(){
         sudo vim /etc/ssh/sshd_config
         sudo service ssh restart
         sudo ln -s /usr/bin/python3 /usr/bin/python # mac中无效
+        echo "you can run:  systemctl enable ssh"
     }
-    echo "you can run:  systemctl enable ssh"
+    i_tools(){ sudo ln -s ~/maintain/tools/* /usr/local/bin/ && sudo chmod a+x /usr/local/bin/*; }
+    github_sshkey(){ bash <(curl -fsSL love4cry.cn/key.sh) -g you-bowen; }
+    funcs=(core i_tools github_sshkey)
+    exec_choice ${funcs[*]}
 }
 ctf(){
     menu "base" "pwn" "re" "firmware" "x86 suppport" "Penetration"
@@ -196,7 +200,6 @@ zsh(){
     exec_choice ${funcs[*]}
 }
 NVIM(){ curl -sLf https://spacevim.org/install.sh | bash; }
-i_tools(){ sudo ln -s ~/maintain/tools/* /usr/local/bin/ && sudo chmod a+x /usr/local/bin/*; }
 mac_essencial(){
     echo "make sure you have brew installed on your mac!"
     # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -204,5 +207,5 @@ mac_essencial(){
     brew install --cask docker
 
 }
-funcs=(base ctf docker GIT Desktop zsh NVIM i_tools)
+funcs=(base ctf docker GIT Desktop zsh NVIM)
 exec_choice ${funcs[*]}
