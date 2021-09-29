@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # 定义变量 a='test' 中间没有空格
-install_info="$HOME/.ubt_install_info"
-jumpIfDoneElseDo()  { if [ ! $(cat "$install_info" | grep "$1") ] ; then $2 ; fi }
-markDone()          { echo "$1" >> "$install_info"; }
+# install_info="$HOME/.ubt_install_info"
+# jumpIfDoneElseDo()  { if [ ! $(cat "$install_info" | grep "$1") ] ; then $2 ; fi } # abadoned
+# markDone()          { echo "$1" >> "$install_info"; }
 tips()              { clear;echo $1; }
 menu()              { id=0;for i in $@;do echo $id. $i;((id++));done;read -p "input your options(eg: '012'):" options; }
 exec_choice()       { id=0;for i in $@;do if [[ $options =~ "$id" ]];then $i;fi;((id++));done }
@@ -15,8 +15,9 @@ menu "base"\
      "git"\
      "ubt_Desktop_essential"\
      "zsh(twice)"\
-     "nvim(plugins)"
-
+     "nvim(plugins)"\
+     "install_tools"
+     
 base(){
     core(){
         echo "installing base modules..."
@@ -25,13 +26,7 @@ base(){
         sudo vim /etc/ssh/sshd_config
         sudo service ssh restart
         sudo ln -s /usr/bin/python3 /usr/bin/python # mac中无效
-        # install my tools
-        sudo ln -s ~/maintain/tools/* /usr/local/bin/
-        sudo chmod a+x /usr/local/bin/*
-        
-        markDone "base_core"
     }
-    jumpIfDoneElseDo "base_core" core 
     echo "you can run:  systemctl enable ssh"
 }
 ctf(){
@@ -39,7 +34,6 @@ ctf(){
     base(){
         # pwntools gdb
         sudo apt-get install -y python3 python3-pip python3-dev git libssl-dev libffi-dev build-essential gdb gdb-multiarch
-        markDone "ctf_base" 
     }
     pwn(){
         # repos_pwn
@@ -128,7 +122,6 @@ ctf(){
         # dirsearch
         cd "$repos_dir" && git clone https://github.com/maurosoria/dirsearch
     }
-    jumpIfDoneElseDo "ctf_base" base 
     funcs=(base pwn re firmware x86 pene)
     exec_choice ${funcs[*]}
 }
@@ -183,9 +176,9 @@ Desktop(){
     sudo apt install fonts-firacode
 }
 zsh(){
+    menu "zsh" "plugins"
     ohmyzsh(){
         echo "installing zsh..."
-        markDone "ohmyzsh"
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     }
     plugins(){
@@ -199,11 +192,11 @@ zsh(){
         rm ~/.zshrc && ln -s $HOME/maintain/.zshrc $HOME
         echo "=====please source your .zshrc!!!======"
     }
-    jumpIfDoneElseDo "ohmyzsh" ohmyzsh
-    plugins
-    echo "please run 'source ~/.zshrc'"
+    funcs=(ohmyzsh plugins)
+    exec_choice ${funcs[*]}
 }
 NVIM(){ curl -sLf https://spacevim.org/install.sh | bash; }
+i_tools(){ sudo ln -s ~/maintain/tools/* /usr/local/bin/ && sudo chmod a+x /usr/local/bin/*; }
 mac_essencial(){
     echo "make sure you have brew installed on your mac!"
     # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -211,5 +204,5 @@ mac_essencial(){
     brew install --cask docker
 
 }
-funcs=(base ctf docker GIT Desktop zsh NVIM)
+funcs=(base ctf docker GIT Desktop zsh NVIM i_tools)
 exec_choice ${funcs[*]}
