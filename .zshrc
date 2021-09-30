@@ -12,6 +12,7 @@ alias idax64="cd ~/pwn/server && ./linux_server64"
 alias pwn="code ~/pwn"
 alias update="cd ~/maintain && git pull && sudo ln -s ~/maintain/tools/* /usr/local/bin"
 alias ggg="gaa && gcmsg ".." && gp"
+alias gb="git reset . && git checkout . && git clean -df" # git back (to origin)
 # for ubuntu Desktop
 # for m1 MACbook
 if [[ $UNAME =~ "Darwin" ]]
