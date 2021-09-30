@@ -48,4 +48,4 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
 autoload -U compinit && compinit -u
 source $ZSH/oh-my-zsh.sh
-. "/Users/flag/.acme.sh/acme.sh.env"
+# . "$HOME/.acme.sh/acme.sh.env"
