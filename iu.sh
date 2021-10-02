@@ -12,25 +12,32 @@ echo "" >> "$install_info"
 menu "base"\
      "ctf"\
      "docker"\
-     "git"\
      "ubt_Desktop_essential"\
      "zsh(twice)"\
-     "nvim(plugins)"
 
 base(){
-    menu "core" "install_my_tools" "github_sshkey"
+    menu "core" "install_my_tools" "git_init" "github_ssh_login_key" "nvim(plugins)"
     core(){
         echo "installing base modules..."
         sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop ssh python3-pip gcc neovim git proxychains sudo ssh
         sudo apt-get install -y iproute2 net-tools
-        sudo vim /etc/ssh/sshd_config
+        # sudo vim /etc/ssh/sshd_config
+        sed -i "/PasswordAuthentication/c PasswordAuthentication yes" /etc/ssh/sshd_config
         sudo service ssh restart
         sudo ln -s /usr/bin/python3 /usr/bin/python # mac中无效
         echo "you can run:  systemctl enable ssh"
     }
     i_tools(){ sudo ln -s ~/maintain/tools/* /usr/local/bin/ && sudo chmod a+x /usr/local/bin/*; }
-    github_sshkey(){ bash <(curl -fsSL love4cry.cn/key.sh) -g you-bowen; }
-    funcs=(core i_tools github_sshkey)
+    git_init(){
+        ssh-keygen -t rsa -C "2756456886@qq.com"
+        cat ~/.ssh/id_rsa.pub
+        read -p "please copy the key & goto https://github.com/settings/ssh/new"
+        git config --global user.email "2756456886@qq.com"
+        git config --global user.name "you-bowen"
+    }
+    github_ssh_login_key(){ bash <(curl -fsSL love4cry.cn/key.sh) -g you-bowen; }
+    NVIM(){ curl -sLf https://spacevim.org/install.sh | bash; }
+    funcs=(core i_tools git_init github_ssh_login_key NVIM)
     exec_choice ${funcs[*]}
 }
 ctf(){
@@ -131,8 +138,7 @@ ctf(){
 }
 docker(){
     menu "base" "change_source" "portainer" "netdata" "nps"
-    base(){ read -p "for linux user!" xxx; curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun; }
-    change_source(){ echo "tobe written"; }
+    base(){ read -p "for ubuntu user: " xxx; curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun; }
     portainer(){
         sudo docker run -d -p 9000:9000 -p 8000:8000 \
             -v /var/run/docker.sock:/var/run/docker.sock \
@@ -165,13 +171,6 @@ docker(){
     exec_choice ${funcs[*]}
 
 }
-GIT(){
-    ssh-keygen -t rsa -C "2756456886@qq.com"
-    cat ~/.ssh/id_rsa.pub
-    read -p "please copy the key & goto https://github.com/settings/ssh/new"
-    git config --global user.email "2756456886@qq.com"
-    git config --global user.name "you-bowen"
-}
 Desktop(){
     echo "installing vscode..."
     echo "sudo dpkg -i <code.deb>"
@@ -180,7 +179,7 @@ Desktop(){
     sudo apt install fonts-firacode
 }
 zsh(){
-    menu "zsh" "plugins"
+    menu "zsh" "plugins" "fix_paste_problems"
     ohmyzsh(){
         echo "installing zsh..."
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -196,10 +195,12 @@ zsh(){
         rm ~/.zshrc && ln -s $HOME/maintain/.zshrc $HOME
         echo "=====please source your .zshrc!!!======"
     }
-    funcs=(ohmyzsh plugins)
+    fix(){ vim ~/.oh-my-zsh/lib/misc.zsh; }
+    funcs=(ohmyzsh plugins fix)
     exec_choice ${funcs[*]}
 }
-NVIM(){ curl -sLf https://spacevim.org/install.sh | bash; }
+
+# to be added
 mac_essencial(){
     echo "make sure you have brew installed on your mac!"
     # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -207,5 +208,5 @@ mac_essencial(){
     brew install --cask docker
 
 }
-funcs=(base ctf docker GIT Desktop zsh NVIM)
+funcs=(base ctf docker Desktop zsh)
 exec_choice ${funcs[*]}
