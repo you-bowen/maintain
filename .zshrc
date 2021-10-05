@@ -16,6 +16,9 @@ alias gitback="git reset . && git checkout . && git clean -df" # git back (to or
 function ipof(){
   ping $1 -c 1 | sed -n "1p" | cut -d '(' -f2|cut -d ')' -f1;
 }
+function killport(){
+  kill -9 $(lsof -i:$1 | sed -n "2p" | cut -d " " -f 2)
+}
 # for ubuntu Desktop
 # for m1 MACbook
 if [[ $UNAME =~ "Darwin" ]]
