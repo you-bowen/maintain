@@ -28,7 +28,7 @@ base(){
         sudo ln -s /usr/bin/python3 /usr/bin/python # mac中无效
         echo "you can run:  systemctl enable ssh"
     }
-    i_tools(){ sudo ln -s ~/maintain/tools/* /usr/local/bin/ && sudo chmod a+x /usr/local/bin/*; }
+    i_tools(){ sudo ln -s ~/maintain/tools/* /usr/local/bin/ && sudo chmod a+x /usr/local/bin/*;echo "pip3 install requirements before u use!"; }
     git_init(){
         ssh-keygen -t rsa -C "2756456886@qq.com"
         cat ~/.ssh/id_rsa.pub
