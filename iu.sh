@@ -7,6 +7,7 @@
 tips()              { clear;echo $1; }
 menu()              { id=0;for i in $@;do echo $id. $i;((id++));done;read -p "input your options(eg: '012'):" options; }
 exec_choice()       { id=0;for i in $@;do if [[ $options =~ "$id" ]];then $i;fi;((id++));done }
+mk_dir()            { if [ ! -d "$1" ];then mkdir "$1";fi }
 
 echo "" >> "$install_info"
 menu "base"\
