@@ -42,7 +42,7 @@ base(){
     exec_choice ${funcs[*]}
 }
 ctf(){
-    menu "base" "pwn" "re" "firmware" "x86 suppport" "Penetration"
+    menu "base" "pwn" "re" "firmware" "x86_suppport" "Penetration"
     base(){
         # pwntools gdb
         sudo apt-get install -y python3 python3-pip python3-dev git libssl-dev libffi-dev build-essential gdb gdb-multiarch
