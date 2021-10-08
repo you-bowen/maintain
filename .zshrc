@@ -43,7 +43,7 @@ then
         echo "find wsl.local in host, changing ip record...";
         # sudo sed -i "$(cat -n $hosts | grep "share" | awk -F" " '{print $1}')i $ip wsl.local" $hosts;
         # 上面的是用来插入内容，仅供参考学习
-        sed "s/^.*wsl.local/$ip wsl.local/g" $hosts
+        sed -i "s/^.*wsl.local/$ip wsl.local/g" $hosts
       else echo "wsl.local not in host file, adding...";
         sudo echo "$ip wsl.local" >> $hosts;
       fi
