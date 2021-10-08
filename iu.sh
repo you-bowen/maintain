@@ -97,11 +97,7 @@ ctf(){
         sudo apt-get install -y autoconf automake libtool 
         cd "$repos_dir" && git clone https://github.com/NixOS/patchelf
         cd patchelf || exit
-        ./bootstrap.sh
-        ./configure
-        make
-        sudo make install
-        make check
+        ./bootstrap.sh && ./configure && make && sudo make install && make check
     }
     re(){
         repos_dir="$HOME/repos_re" 
