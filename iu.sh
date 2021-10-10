@@ -15,6 +15,7 @@ menu "base"\
      "docker"\
      "ubt_Desktop_essential"\
      "zsh(twice)"\
+     "wsl_desktop"\
 
 base(){
     menu "core" "install_my_tools" "git_init" "github_ssh_login_key" "nvim(plugins)"
@@ -98,6 +99,9 @@ ctf(){
         cd "$repos_dir" && git clone https://github.com/NixOS/patchelf
         cd patchelf || exit
         ./bootstrap.sh && ./configure && make && sudo make install && make check
+
+        # seccomp-tools
+        sudo apt install gcc ruby-dev && gem install seccomp-tools
     }
     re(){
         repos_dir="$HOME/repos_re" 
@@ -196,7 +200,23 @@ zsh(){
     funcs=(ohmyzsh plugins fix)
     exec_choice ${funcs[*]}
 }
+wsl_desktop(){
+    # ref: https://harshityadav95.medium.com/install-gui-desktop-in-wsl2-ubuntu-20-04-lts-in-windows-10-ae0d8d9e4459
+    sudo apt-get install -y xfce4 xfce4-goodies
+    sudo apt-get install xrdp
+    sudo chmod a+w /etc/xrdp/startwm.sh
+    sudo sed -i "33,34d" /etc/xrdp/startwm.sh
+    sudo echo -e "# xce4\nstartxfce4" >> /etc/xrdp/startwm.sh
 
+    sudo cp /etc/xrdp/xrdp.ini /etc/xrdp/xrdp.ini.bak
+    sudo sed -i 's/3389/3390/g' /etc/xrdp/xrdp.ini # you can specify port here(3390 in this case)
+    sudo sed -i 's/max_bpp=32/#max_bpp=32\nmax_bpp=128/g' /etc/xrdp/xrdp.ini
+    sudo sed -i 's/xserverbpp=24/#xserverbpp=24\nxserverbpp=128/g' /etc/xrdp/xrdp.ini
+    sudo echo xfce4-session > ~/.xsession # enable dbus
+    sudo systemctl enable dbus
+    sudo /etc/init.d/dbus start
+    sudo /etc/init.d/xrdp start
+}
 # to be added
 mac_essencial(){
     echo "make sure you have brew installed on your mac!"
@@ -205,5 +225,5 @@ mac_essencial(){
     brew install --cask docker
 
 }
-funcs=(base ctf docker Desktop zsh)
+funcs=(base ctf docker Desktop zsh wsl_desktop)
 exec_choice ${funcs[*]}
