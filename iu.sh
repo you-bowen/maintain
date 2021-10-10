@@ -222,7 +222,7 @@ mac_essencial(){
     # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     brew install curl wget neofetch git
     brew install --cask docker
-
+    brew install miniconda
 }
 funcs=(base ctf docker Desktop zsh wsl_desktop)
 exec_choice ${funcs[*]}
