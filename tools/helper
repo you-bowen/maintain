@@ -1,0 +1,6 @@
+#!/usr/bin/python3
+from pprint import pprint
+data = {
+    "不打印日志":"echo 'hello world' > /dev/null 2>&1 &  ref:https://www.cnblogs.com/ultranms/p/9353157.html",
+}
+pprint(data)

