@@ -20,7 +20,7 @@ base(){
     menu "core" "install_my_tools" "git_init" "github_ssh_login_key" "nvim(plugins)"
     core(){
         echo "installing base modules..."
-        sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop ssh python3-pip gcc neovim git proxychains sudo ssh
+        sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop openssh python3-pip gcc neovim git proxychains sudo ssh
         sudo apt-get install -y iproute2 net-tools
         # sudo vim /etc/ssh/sshd_config
         sed -i "/PasswordAuthentication/c PasswordAuthentication yes" /etc/ssh/sshd_config
@@ -216,13 +216,21 @@ wsl_desktop(){
     sudo /etc/init.d/dbus start
     sudo /etc/init.d/xrdp start
 }
-# to be added
 mac_essencial(){
     echo "make sure you have brew installed on your mac!"
     # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     brew install curl wget neofetch git
     brew install --cask docker
     brew install miniconda
+}
+termux(){
+    passwd
+    termux-change-repo
+    ln -s ~/maintain/tools/* /data/data/com.termux/files/usr/bin
+    pkg install wget vim curl zsh git neofetch python htop
+    pkg install libxml2 libxslt
+    termux-setup-storage # 访问手机存储区
+    ln -s /storage/emulated/0/Android/data/com.tencent.mobileqq/Tencent/QQfile_recv ~/storage/qq_file_recv
 }
 funcs=(base ctf docker Desktop zsh wsl_desktop)
 exec_choice ${funcs[*]}

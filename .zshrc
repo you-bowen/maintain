@@ -55,6 +55,11 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   }
   wsl_hosts
   load ssh
+elif [[ $UNAME =~ "Android" ]]; then
+  echo "U are using Android! I know"
+  __conda="not_exist"
+  sshd
+
 else
   __conda="$HOME/.miniconda"
 fi
@@ -80,7 +85,7 @@ source $ZSH/oh-my-zsh.sh
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-if [ -d $__conda ]; then
+if [ -d $__conda -a $__conda ]; then
   __conda_setup="$('$__conda/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
   if [ $? -eq 0 ]; then
       eval "$__conda_setup"
