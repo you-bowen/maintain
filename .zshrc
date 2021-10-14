@@ -13,6 +13,8 @@ alias pwn="code ~/pwn"
 alias update="cd ~/maintain && git pull && sudo ln -s ~/maintain/tools/* /usr/local/bin"
 alias ggg="gaa && gcmsg ".." && gp"
 alias gitback="git reset . && git checkout . && git clean -df" # git back (to origin)
+alias cae="conda activate"
+alias cde="conda deactivate"
 # hacker
 alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
 alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
@@ -57,7 +59,6 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   load ssh
 elif [[ $UNAME =~ "Android" ]]; then
   echo "U are using Android! I know"
-  __conda="not_exist"
   sshd
 
 else
@@ -100,3 +101,10 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# >>> nvm initialize >>>
+if [ -d "$HOME/.nvm" ]; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
+# <<< nvm initialize <<<

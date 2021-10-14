@@ -15,6 +15,7 @@ menu "base"\
      "ubt_Desktop_essential"\
      "zsh(twice)"\
      "wsl_desktop"\
+     "termux"
 
 base(){
     menu "core" "install_my_tools" "git_init" "github_ssh_login_key" "nvim(plugins)"
@@ -221,16 +222,18 @@ mac_essencial(){
     # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     brew install curl wget neofetch git
     brew install --cask docker
-    brew install miniconda
+    # brew install miniconda
+    brew install android-platform-tools
 }
 termux(){
     passwd
     termux-change-repo
     ln -s ~/maintain/tools/* /data/data/com.termux/files/usr/bin
-    pkg install wget vim curl zsh git neofetch python htop
+    pkg install wget vim curl zsh git neofetch python htop tsu
     pkg install libxml2 libxslt
     termux-setup-storage # 访问手机存储区
     ln -s /storage/emulated/0/Android/data/com.tencent.mobileqq/Tencent/QQfile_recv ~/storage/qq_file_recv
+    echo "more info, please goto wiki: https://wiki.termux.com/wiki/Main_Page"
 }
-funcs=(base ctf docker Desktop zsh wsl_desktop)
+funcs=(base ctf docker Desktop zsh wsl_desktop termux)
 exec_choice ${funcs[*]}

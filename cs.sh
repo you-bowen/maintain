@@ -20,7 +20,9 @@ elif [ "$1" == "docker" ]; then
     data='{\n\t"registry-mirrors": ["https://ustc-edu-cn.mirror.aliyuncs.com/"],\n\t"log-driver":"json-file",\n\t"log-opts": {"max-size":"500m", "max-file":"3"}\n}'
     echo -e $data && read -p "copy now"
     sudo vim $source
-
+elif [ "$1" == "npm" ]; then
+    data=https://registry.npm.taobao.org
+    npm config set registry $data
     
     tips="you can run <sudo systemctl daemon-reload && sudo systemctl restart docker>"
 else 
