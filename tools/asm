@@ -73,6 +73,20 @@ data = {
     指针寄存器
         ESP-栈顶
         EBP-栈底
+    """,
+
+    "单位":"""
+    bit
+    byte    8bit
+    word    16bit   2字节
+    Dword   32bit   4字节
+    qword   64bit   8字节
+    """,
+
+    "fd":"""
+    fd=0    标准输入
+    fd=1    标准输出
+    fd=2    标准错误
     """
 }
 

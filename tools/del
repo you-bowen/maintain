@@ -1,0 +1,91 @@
+#!/usr/bin/python3
+import os
+import pickle
+import sys
+import argparse
+
+j = os.path.join
+
+class Bin:
+    def __init__(self):
+        self.home = os.environ["HOME"]
+        self.bin_addr = j(self.home,".rubbish_bin")
+        self.list_addr = j(self.bin_addr, ".list")
+        self.bin = list() # maxsize = 100
+        self.max_size = 100
+        self.init_bin()
+        self.pwd = os.popen("pwd").read()[:-1]
+
+    def init_bin(self):
+        if os.path.exists(self.bin_addr):
+            self.load_bin()
+        else:
+            os.mkdir(self.bin_addr)
+            print("rubbish bin not initialized, init_ing...")
+            self.write_bin() # 写个空的list进去
+
+    def add(self, file_name): # 把文件移动到.rubbish_bin中
+        def rm(path, abs=False):
+            if abs:
+                path = j(self.bin_addr, path)
+            if os.path.isdir(path):
+                os.system(f"rm -r {path}")
+            else:
+                os.system(f"rm {path}")
+
+        if os.path.exists(file_name):
+            # 1. 新来的文件和bin中的重名就 删除 原来的文件
+            try:
+                idx = self.bin.index(file_name)
+                del self.bin[idx]
+                rm(file_name, abs=True) # 删除垃圾桶内内容 abs
+            except:
+                pass
+            
+            # 2. 判断垃圾桶满了没
+            if len(self.bin) >= self.max_size:
+                first = self.bin[0]; del self.bin[0]
+                rm(first, abs=True) # 删除垃圾桶内内容 abs
+
+            # 3. 把新来的文件移动到.rubbish_bin中
+            os.system(f"mv {file_name} {self.bin_addr}")
+            self.bin.append(file_name)
+            self.write_bin()
+        else:
+            print(f"path not exist! {file_name}")
+
+    def show_bin(self,v):
+        if len(self.bin) > 0:
+            total_size = os.popen(f"du -sh {self.bin_addr} | awk -F' ' '{{print $1}}'").read()
+            print(f"used: {len(self.bin)} | left: {self.max_size-len(self.bin)} | total_size: {total_size}")
+            for id, i in enumerate(self.bin):
+                # v>=1 : print size
+                full_path = j(self.bin_addr, i)
+                size = os.popen(f"du -sh {full_path} | awk -F' ' '{{print $1}}'").read().strip() if v>=2 else ""
+                Type = "dir" if os.path.isdir(full_path) else "file"
+                print(f"{id}. {i}".ljust(15," ")+f" {Type}\t{size}")
+        else:
+            print("bin is empty!")
+
+    def load_bin(self):
+        with open(self.list_addr,"rb") as f:
+            self.bin = pickle.load(f)
+
+    def write_bin(self):
+        with open(self.list_addr,"wb") as f:
+            pickle.dump(self.bin, f)
+
+
+parser = argparse.ArgumentParser(
+    description="del 2 ~/.rubbish_bin !",
+    usage="del <anything> "
+)
+parser.add_argument('-v','--verbose',  action="count", help="show file list in bin")
+parser.add_argument("targets", help="targets to remove", type=str, nargs='*')
+args = parser.parse_args()
+
+my_bin = Bin()
+if args.verbose:
+    my_bin.show_bin(args.verbose)
+
+[my_bin.add(i) for i in args.targets]

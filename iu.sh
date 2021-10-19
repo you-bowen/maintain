@@ -229,9 +229,10 @@ termux(){
     passwd
     termux-change-repo
     ln -s ~/maintain/tools/* /data/data/com.termux/files/usr/bin
-    pkg install wget vim curl zsh git neofetch python htop tsu
+    pkg install wget vim curl zsh git neofetch python htop tsu ssh
     pkg install libxml2 libxslt
     termux-setup-storage # 访问手机存储区
+    pip3 install -r requirements.txt
     ln -s /storage/emulated/0/Android/data/com.tencent.mobileqq/Tencent/QQfile_recv ~/storage/qq_file_recv
     echo "more info, please goto wiki: https://wiki.termux.com/wiki/Main_Page"
 }
