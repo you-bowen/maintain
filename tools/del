@@ -12,7 +12,7 @@ class Bin:
         self.bin_addr = j(self.home,".rubbish_bin")
         self.list_addr = j(self.bin_addr, ".list")
         self.bin = list() # maxsize = 100
-        self.max_size = 100
+        self.max_size = 50
         self.init_bin()
         self.pwd = os.popen("pwd").read()[:-1]
 
@@ -67,6 +67,19 @@ class Bin:
         else:
             print("bin is empty!")
 
+    def back(self, file_name):
+        if file_name in self.bin:
+            print(f"return {file_name} to ~/{file_name}")
+            if file_name in os.listdir(os.environ["HOME"]):
+                print(f"can't move back {file_name}, file with the same name in the root!")
+            else:
+                os.system(f"mv {j(self.bin_addr, file_name)} ~/")
+                idx = self.bin.index(file_name)
+                del self.bin[idx]
+                self.write_bin()
+        else:
+            print(f"{file_name} not in rubbish bin...")
+
     def load_bin(self):
         with open(self.list_addr,"rb") as f:
             self.bin = pickle.load(f)
@@ -82,10 +95,15 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument('-v','--verbose',  action="count", help="show file list in bin")
 parser.add_argument("targets", help="targets to remove", type=str, nargs='*')
-args = parser.parse_args()
+parser.add_argument("-b", "--back", help="targets to move back", type=str, nargs='*')
 
+args = parser.parse_args()
+# print(args)
 my_bin = Bin()
 if args.verbose:
     my_bin.show_bin(args.verbose)
 
-[my_bin.add(i) for i in args.targets]
+if args.targets:
+    [my_bin.add(i) for i in args.targets]
+if args.back:
+    [my_bin.back(i) for i in args.back]

@@ -21,11 +21,15 @@ base(){
     menu "core" "install_my_tools" "git_init" "github_ssh_login_key" "nvim(plugins)"
     core(){
         echo "installing base modules..."
-        sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop openssh python3-pip gcc neovim git proxychains sudo ssh
+        sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop python3-pip gcc neovim git proxychains sudo ssh
         sudo apt-get install -y iproute2 net-tools
         # sudo vim /etc/ssh/sshd_config
-        sed -i "/PasswordAuthentication/c PasswordAuthentication yes" /etc/ssh/sshd_config
-        sudo service ssh restart
+        read -p "if you want to install&config ssh?(y/n)" xxx
+        if [ $xxx == "y" ]; then
+            sudo apt-get install openssh-server
+            sudo sed -i "/PasswordAuthentication/c PasswordAuthentication yes" /etc/ssh/sshd_config
+            sudo service ssh restart
+        fi
         sudo ln -s /usr/bin/python3 /usr/bin/python # mac中无效
         echo "you can run:  systemctl enable ssh"
     }
