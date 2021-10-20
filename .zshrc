@@ -25,8 +25,6 @@ function ipof(){
 function killport(){
   kill -9 $(lsof -i:$1 | sed -n "2p" | cut -d " " -f 2)
 }
-# for ubuntu Desktop
-# for m1 MACbook
 if [[ $UNAME =~ "Darwin" ]]; then
   __conda="/opt/homebrew/Caskroom/miniconda/base"
   echo "U are using Mac! I know."
@@ -34,11 +32,27 @@ if [[ $UNAME =~ "Darwin" ]]; then
   alias python3="/opt/homebrew/bin/python3"
   alias pip3="/opt/homebrew/bin/pip3"
   alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
-# for WSL2
+  alias sed="gsed"
+  function host_cpu(){
+    host_file="/etc/hosts"
+    line=$(cat -n $host_file| grep -w cpu | awk -F" " '{print $1}')
+    sudo gsed -i "$line c\\$1 cpu" $host_file
+  }
+  function push2wsl(){
+    scp $1 ybw@cpu:~/pwn/target
+  }
 elif [[ $UNAME =~ "WSL2" ]]; then
   __conda="$HOME/.miniconda"
   echo "U are using WSL2! I know."
+  export PATH=/mnt/c/Windows/System32:$PATH
   alias pwncp="cp /mnt/c/Users/27564/Desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
+  alias win_ip=$(ipconfig.exe | grep 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2)
+  function pfd2win(){
+    # port forward to windows
+    netsh.exe interface portproxy reset
+    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=22 connectaddress=wsl.local connectport=22
+    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=23946 connectaddress=wsl.local connectport=23946
+  }
   function wsl_hosts(){
     hosts="/mnt/c/Windows/System32/drivers/etc/hosts"
     ip=$(ip add | grep inet | grep eth0 | awk -F" " '{print $2}' | cut -d"/" -f 1)

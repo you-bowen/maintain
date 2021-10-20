@@ -24,14 +24,14 @@ base(){
         sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop python3-pip gcc neovim git proxychains sudo ssh
         sudo apt-get install -y iproute2 net-tools
         # sudo vim /etc/ssh/sshd_config
+        sudo ln -s /usr/bin/python3 /usr/bin/python # mac中无效
         read -p "if you want to install&config ssh?(y/n)" xxx
         if [ $xxx == "y" ]; then
             sudo apt-get install openssh-server
             sudo sed -i "/PasswordAuthentication/c PasswordAuthentication yes" /etc/ssh/sshd_config
             sudo service ssh restart
+            echo "you can run:  systemctl enable ssh"
         fi
-        sudo ln -s /usr/bin/python3 /usr/bin/python # mac中无效
-        echo "you can run:  systemctl enable ssh"
     }
     i_tools(){ sudo ln -s ~/maintain/tools/* /usr/local/bin/ && sudo chmod a+x /usr/local/bin/*;echo "pip3 install requirements before u use!"; }
     git_init(){
@@ -142,6 +142,7 @@ ctf(){
     exec_choice ${funcs[*]}
 }
 docker(){
+    # docker canbe installed by `apt install docker.io`
     menu "base" "change_source" "portainer" "netdata" "nps"
     base(){ read -p "for ubuntu user: " xxx; curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun; }
     portainer(){
