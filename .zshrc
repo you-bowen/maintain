@@ -89,6 +89,7 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   }
   wsl_hosts
   load ssh
+  ~/npc.sh # start npc service if it's not running
 elif [[ $UNAME =~ "Android" ]]; then
   echo "U are using Android! I know"
   sshd
