@@ -34,7 +34,7 @@ function aoc(){
   if [ $line ]; then
     sudo $sed -i "$line c\\$2" $3             # change
   else
-    sudo chmod g+w $3 && sudo echo "$2" >> $3 # add
+    sudo chmod a+w $3 && sudo echo "$2" >> $3 # add
   fi
 }
 if [[ $UNAME =~ "Darwin" ]]; then
@@ -112,28 +112,33 @@ autoload -U compinit && compinit -u
 source $ZSH/oh-my-zsh.sh
 # . "$HOME/.acme.sh/acme.sh.env"
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-if [ -d $__conda -a $__conda ]; then
-  __conda_setup="$('$__conda/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-  if [ $? -eq 0 ]; then
-      eval "$__conda_setup"
-  else
-      if [ -f "$__conda/etc/profile.d/conda.sh" ]; then
-          . "$__conda/etc/profile.d/conda.sh"
-      else
-          export PATH="$__conda/bin:$PATH"
-      fi
+function conda_init(){
+  # >>> conda initialize >>>
+  # !! Contents within this block are managed by 'conda init' !!
+  if [ -d $__conda -a $__conda ]; then
+    __conda_setup="$('$__conda/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+    if [ $? -eq 0 ]; then
+        eval "$__conda_setup"
+    else
+        if [ -f "$__conda/etc/profile.d/conda.sh" ]; then
+            . "$__conda/etc/profile.d/conda.sh"
+        else
+            export PATH="$__conda/bin:$PATH"
+        fi
+    fi
   fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+  unset __conda_setup
+  # <<< conda initialize <<<
+}
 
-# >>> nvm initialize >>>
-if [ -d "$HOME/.nvm" ]; then
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
-# <<< nvm initialize <<<
+function nvm_init(){
+  # >>> nvm initialize >>>
+  if [ -d "$HOME/.nvm" ]; then
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  fi
+  # <<< nvm initialize <<<
+}
+
 
