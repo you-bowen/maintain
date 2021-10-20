@@ -46,8 +46,7 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   echo "U are using WSL2! I know."
   export PATH=/mnt/c/Windows/System32:$PATH
   alias pwncp="cp /mnt/c/Users/27564/Desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
-  win_ip=$(ipconfig.exe | grep 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2)
-  echo "win ip: $win_ip"
+  win_ip=$(ipconfig.exe | grep 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
   function pfd2win(){
     # port forward to windows
     netsh.exe interface portproxy reset
