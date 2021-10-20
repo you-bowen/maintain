@@ -75,8 +75,13 @@ elif [[ $UNAME =~ "WSL2" ]]; then
     # 把win的ip加入到wsl的host里面，如果局域网ip变了就重新进行端口转发
     hosts="/etc/hosts"
     echo "win ip: $win_ip"
-    aoc "win.local" "$win_ip win.local" "$hosts"
-    pfd2win
+    win_ip_not_change=$(cat $hosts | grep "$win_ip win.local")
+    if [ $win_ip_not_change ]; then 
+      echo "win ip not changed."
+    else
+      echo "win ip changed, write host & port forward..."
+      aoc "win.local" "$win_ip win.local" "$hosts"
+      pfd2win 
   }
   function load(){
     if [[ $(service $1 status | grep not) ]];then sudo service $1 start;echo "$1 just started";else echo "$1 is already running";fi
