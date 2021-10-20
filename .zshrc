@@ -25,6 +25,18 @@ function ipof(){
 function killport(){
   kill -9 $(lsof -i:$1 | sed -n "2p" | cut -d " " -f 2)
 }
+gsed_fail=$(which gsed | grep "found")
+if [ $gsed_fail ];then sed=sed;else sed=gsed;fi
+function aoc(){
+  # add if exist else change (add or change)
+  # 3args: "keyword" "context... keyword" file_location
+  line=$(cat -n $3| grep -w $1 | awk -F" " '{print $1}')
+  if [ $line ]; then
+    sudo $sed -i "$line c\\$2" $3             # change
+  else
+    sudo chmod g+w $3 && sudo echo "$2" >> $3 # add
+  fi
+}
 if [[ $UNAME =~ "Darwin" ]]; then
   __conda="/opt/homebrew/Caskroom/miniconda/base"
   echo "U are using Mac! I know."
@@ -34,9 +46,10 @@ if [[ $UNAME =~ "Darwin" ]]; then
   alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
   alias sed="gsed"
   function host_cpu(){
+    # set host for `cpu`(my windows)
     host_file="/etc/hosts"
     line=$(cat -n $host_file| grep -w cpu | awk -F" " '{print $1}')
-    sudo gsed -i "$line c\\$1 cpu" $host_file
+    sudo gsed -i "$line c\\$1 cpu" $host_file 
   }
   function push2wsl(){
     scp $1 ybw@cpu:~/pwn/target
@@ -54,18 +67,16 @@ elif [[ $UNAME =~ "WSL2" ]]; then
     netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=23946 connectaddress=wsl.local connectport=23946
   }
   function wsl_hosts(){
+    # 把wsl的ip添加到windows的host里面
     hosts="/mnt/c/Windows/System32/drivers/etc/hosts"
     ip=$(ip add | grep inet | grep eth0 | awk -F" " '{print $2}' | cut -d"/" -f 1)
     echo "new record: $ip wsl.local"
-    if [[ $(cat $hosts | grep "wsl.local") ]];
-    then
-      echo "find wsl.local in host, changing ip record...";
-      # sudo sed -i "$(cat -n $hosts | grep "share" | awk -F" " '{print $1}')i $ip wsl.local" $hosts;
-      # 上面的是用来插入内容，仅供参考学习
-      sed -i "s/^.*wsl.local/$ip wsl.local/g" $hosts
-    else echo "wsl.local not in host file, adding...";
-      sudo echo "$ip wsl.local" >> $hosts;
-    fi
+    aoc "wsl.local" "$ip wsl.local" "$hosts"
+    # 把win的ip加入到wsl的host里面，如果局域网ip变了就重新进行端口转发
+    hosts="/etc/hosts"
+    echo "win ip: $win_ip"
+    aoc "win.local" "$win_ip win.local" "$hosts"
+    pfd2win
   }
   function load(){
     if [[ $(service $1 status | grep not) ]];then sudo service $1 start;echo "$1 just started";else echo "$1 is already running";fi
