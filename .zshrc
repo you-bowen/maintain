@@ -81,7 +81,8 @@ elif [[ $UNAME =~ "WSL2" ]]; then
     else
       echo "win ip changed, write host & port forward..."
       aoc "win.local" "$win_ip win.local" "$hosts"
-      pfd2win 
+      pfd2win
+    fi
   }
   function load(){
     if [[ $(service $1 status | grep not) ]];then sudo service $1 start;echo "$1 just started";else echo "$1 is already running";fi
