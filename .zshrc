@@ -101,7 +101,8 @@ fi
 # key bindings
 bindkey \^U backward-kill-line
 
-ZSH_THEME="ys"
+if [ -d "$ZSH/theme/ybw-ys.zsh-theme" ]; then ZSH_THEME="ybw-ys"; else ZSH_THEME="ys"; fi
+
 
 plugins=(git
 gitignore

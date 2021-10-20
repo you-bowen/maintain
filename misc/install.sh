@@ -1,0 +1,1 @@
+ln -s ~/maintain/misc/ybw-ys.zsh-theme ~/.oh-my-zsh/themes
