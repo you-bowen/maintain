@@ -59,7 +59,7 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   echo "U are using WSL2! I know."
   export PATH=/mnt/c/Windows/System32:$PATH
   alias pwncp="cp /mnt/c/Users/27564/Desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
-  win_ip=$(ipconfig.exe | grep 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
+  win_ip=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
   function pfd2win(){
     # port forward to windows
     netsh.exe interface portproxy reset
@@ -101,7 +101,7 @@ fi
 # key bindings
 bindkey \^U backward-kill-line
 
-if [ -d "$ZSH/theme/ybw-ys.zsh-theme" ]; then ZSH_THEME="ybw-ys"; else ZSH_THEME="ys"; fi
+if [ -e "$ZSH/themes/ybw-ys.zsh-theme" ]; then ZSH_THEME="ybw-ys"; else ZSH_THEME="ys"; fi
 
 
 plugins=(git
