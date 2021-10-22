@@ -96,6 +96,7 @@ elif [[ $UNAME =~ "Android" ]]; then
 
 else
   __conda="$HOME/.miniconda"
+  alias clash="~/clash/clash -d ~/clash/ > /dev/null 2>&1 &"
 fi
 
 # key bindings
