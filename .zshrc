@@ -150,4 +150,4 @@ function nvm_init(){
   # <<< nvm initialize <<<
 }
 
-
+export PATH=$HOME/pwn/tools:$PATH
