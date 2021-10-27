@@ -11,7 +11,7 @@ alias idax86="cd ~/pwn/server && ./linux_server"
 alias idax64="cd ~/pwn/server && ./linux_server64"
 alias pwn="code ~/pwn"
 alias update="cd ~/maintain && git pull && sudo ln -s ~/maintain/tools/* /usr/local/bin"
-alias ggg="gaa && gcmsg ".." && gp"
+alias ggg="gaa && gcmsg '..' && gp"
 alias gitback="git reset . && git checkout . && git clean -df" # git back (to origin)
 alias cae="conda activate"
 alias cde="conda deactivate"
@@ -111,6 +111,7 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   downloads="$user/Downloads"
   echo "U are using WSL2! I know."
   export PATH=/mnt/c/Windows/System32:$PATH
+  alias ggg="gaa && gcmsg '..' && /mnt/c/Program\ Files/Git/cmd/git.exe push"
   alias pwncp="cp $desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
   win_ip=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
   function pfd2win(){
