@@ -76,22 +76,33 @@ if [[ $UNAME =~ "Darwin" ]]; then
   alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
   alias sed="gsed"
   alias wifi='/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
-  function host_cpu(){
-    # set host for `cpu`(my windows)
-    sudo sed "s/.*cpu/$1 cpu/g"  -i /etc/hosts
+  function cpu_host(){
+    # set host for {cpu}(my windows)
+    sudo gsed -i "s/.*cpu/$1 cpu/g" /etc/hosts;
   }
-  function update_host_cpu(){
+  function cpu_alive(){
+    a=$(ping $cpu_ip -c 1 -t 1 | grep "1 packets received")
+    if [[ $a ]]; then echo "cpu alive";fi
+  }
+  function cpu_host_update(){
+    # when connect to known wiki: (test cpu alive)?(set host):(set pub ipv4 host)
     wifi_name=$(wifi -I| awk -F: '/ SSID/{print $2}' | sed 's/^[ \t]*//g')
-    echo "current wifi to $wifi_name"
-    if    [ $wifi_name == "Neri" ];       then host_cpu 192.168.2.249;
-    elif  [ $wifi_name == "Redmi K30" ];  then host_cpu 192.168.43.113;
-    else  host_cpu 47.110.233.7;
+    echo -n "current wifi: $wifi_name | "
+    if   [ $wifi_name = "Neri" ]; then
+      cpu_ip="192.168.2.249"
+    elif [ $wifi_name = "Redmi K30" ]; then
+      cpu_ip="192.168.43.113"
+    else  cpu_ip="47.110.233.7";fi
+
+    if [[ -z $(cpu_alive) ]]; then cpu_ip="47.110.233.7"; echo -n "cpu not alive | ";fi
+    cpu_host $cpu_ip
+    echo "host {cpu} updated"
   }
   function push-wsl(){
     scp $1 ybw@cpu:~/pwn/target
     scp $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
   }
-  update_host_cpu
+  cpu_host_update
 elif [[ $UNAME =~ "WSL2" ]]; then
   __conda="$HOME/.miniconda"
   user="/mnt/c/Users/27564"
@@ -103,24 +114,24 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   win_ip=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
   function pfd2win(){
     # port forward to windows
-    netsh.exe interface portproxy reset
-    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=22222 connectaddress=wsl.local connectport=22
-    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=23946 connectaddress=wsl.local connectport=23946
+    netsh.exe interface portproxy reset > $null
+    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=22222 connectaddress=wsl.local connectport=22 > $null
+    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=23946 connectaddress=wsl.local connectport=23946 > $null
   }
   function wsl_hosts(){
     # 把wsl的ip添加到windows的host里面
     hosts="/mnt/c/Windows/System32/drivers/etc/hosts"
     ip=$(ip add | grep inet | grep eth0 | awk -F" " '{print $2}' | cut -d"/" -f 1)
-    echo "new record: $ip wsl.local"
+    echo -n "new record: $ip wsl.local | "
     aoc "wsl.local" "$ip wsl.local" "$hosts"
     # 把win的ip加入到wsl的host里面，如果局域网ip变了就重新进行端口转发
     hosts="/etc/hosts"
-    echo "win ip: $win_ip"
+    echo -n "win ip: $win_ip | "
     win_ip_not_change=$(cat $hosts | grep "$win_ip win.local")
     if [ $win_ip_not_change ]; then 
-      echo "win ip not changed."
+      echo "not changed."
     else
-      echo "win ip changed, write host & port forward..."
+      echo "Forwarding..."
       aoc "win.local" "$win_ip win.local" "$hosts"
       pfd2win
     fi
