@@ -76,6 +76,7 @@ if [[ $UNAME =~ "Darwin" ]]; then
   alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
   alias sed="gsed"
   alias wifi='/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
+  alias code-wsl-pwn="code --remote ssh-remote+wsl /home/ybw/pwn"
   function cpu_host(){
     # set host for {cpu}(my windows)
     sudo gsed -i "s/.*cpu/$1 cpu/g" /etc/hosts;
@@ -110,7 +111,8 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   downloads="$user/Downloads"
   echo "U are using WSL2! I know."
   export PATH=/mnt/c/Windows/System32:$PATH
-  alias pwncp="cp /mnt/c/Users/27564/Desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
+  alias pwncp="cp $desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
+  alias git="/mnt/c/Program\ Files/Git/cmd/git.exe"
   win_ip=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
   function pfd2win(){
     # port forward to windows
@@ -122,7 +124,7 @@ elif [[ $UNAME =~ "WSL2" ]]; then
     # 把wsl的ip添加到windows的host里面
     hosts="/mnt/c/Windows/System32/drivers/etc/hosts"
     ip=$(ip add | grep inet | grep eth0 | awk -F" " '{print $2}' | cut -d"/" -f 1)
-    echo -n "new record: $ip wsl.local | "
+    echo -n "wsl ip: $ip | "
     aoc "wsl.local" "$ip wsl.local" "$hosts"
     # 把win的ip加入到wsl的host里面，如果局域网ip变了就重新进行端口转发
     hosts="/etc/hosts"
