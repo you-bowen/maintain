@@ -112,7 +112,6 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   echo "U are using WSL2! I know."
   export PATH=/mnt/c/Windows/System32:$PATH
   alias pwncp="cp $desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
-  alias git="/mnt/c/Program\ Files/Git/cmd/git.exe"
   win_ip=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
   function pfd2win(){
     # port forward to windows
