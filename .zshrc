@@ -1,5 +1,8 @@
 export ZSH="$HOME/.oh-my-zsh"
 UNAME=$(uname -a)
+# iot
+alias serial="ls /dev | grep usb"
+alias flasher="python3 ~/repos/nodemcu-pyflasher/Main.py &"
 # network
 alias proxyoff="export https_proxy='' http_proxy='' all_proxy=''"
 alias proxyon="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890"
@@ -91,7 +94,7 @@ if [[ $UNAME =~ "Darwin" ]]; then
     echo -n "current wifi: $wifi_name | "
     if   [ $wifi_name = "Neri" ]; then
       cpu_ip="192.168.2.249"
-    elif [ $wifi_name = "Redmi K30" ]; then
+    elif [ $wifi_name = "Redmilk" ]; then
       cpu_ip="192.168.43.113"
     else  cpu_ip="47.110.233.7";fi
 
@@ -100,8 +103,8 @@ if [[ $UNAME =~ "Darwin" ]]; then
     echo "host {cpu} updated"
   }
   function push-wsl(){
-    scp $1 ybw@cpu:~/pwn/target
-    scp $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
+    scp -P 22222 $1 ybw@cpu:~/pwn/target
+    scp -P 22222 $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
   }
   cpu_host_update
 elif [[ $UNAME =~ "WSL2" ]]; then
@@ -161,6 +164,10 @@ if [ -e "$ZSH/themes/ybw-ys.zsh-theme" ]; then ZSH_THEME="ybw-ys"; else ZSH_THEM
 
 plugins=(git
 gitignore
+osx
+cp
+gitignore
+colored-man-pages
 extract
 sudo
 zsh-autosuggestions
