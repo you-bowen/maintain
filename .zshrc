@@ -1,5 +1,8 @@
 export ZSH="$HOME/.oh-my-zsh"
 UNAME=$(uname -a)
+# iot
+alias serial="ls /dev | grep usb"
+alias flasher="python3 ~/repos/nodemcu-pyflasher/Main.py &"
 # network
 alias proxyoff="export https_proxy='' http_proxy='' all_proxy=''"
 alias proxyon="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890"
@@ -11,7 +14,7 @@ alias idax86="cd ~/pwn/server && ./linux_server"
 alias idax64="cd ~/pwn/server && ./linux_server64"
 alias pwn="code ~/pwn"
 alias update="cd ~/maintain && git pull && sudo ln -s ~/maintain/tools/* /usr/local/bin"
-alias ggg="gaa && gcmsg ".." && gp"
+alias ggg="gaa && gcmsg '..' && gp"
 alias gitback="git reset . && git checkout . && git clean -df" # git back (to origin)
 alias cae="conda activate"
 alias cde="conda deactivate"
@@ -91,7 +94,7 @@ if [[ $UNAME =~ "Darwin" ]]; then
     echo -n "current wifi: $wifi_name | "
     if   [ $wifi_name = "Neri" ]; then
       cpu_ip="192.168.2.249"
-    elif [ $wifi_name = "Redmi K30" ]; then
+    elif [ $wifi_name = "Redmilk" ]; then
       cpu_ip="192.168.43.113"
     else  cpu_ip="47.110.233.7";fi
 
@@ -100,8 +103,8 @@ if [[ $UNAME =~ "Darwin" ]]; then
     echo "host {cpu} updated"
   }
   function push-wsl(){
-    scp $1 ybw@cpu:~/pwn/target
-    scp $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
+    scp -P 22222 $1 ybw@cpu:~/pwn/target
+    scp -P 22222 $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
   }
   cpu_host_update
 elif [[ $UNAME =~ "WSL2" ]]; then
@@ -111,6 +114,7 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   downloads="$user/Downloads"
   echo "U are using WSL2! I know."
   export PATH=/mnt/c/Windows/System32:$PATH
+  alias ggg="gaa && gcmsg '..' && /mnt/c/Program\ Files/Git/cmd/git.exe push"
   alias pwncp="cp $desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
   win_ip=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
   function pfd2win(){
@@ -160,6 +164,10 @@ if [ -e "$ZSH/themes/ybw-ys.zsh-theme" ]; then ZSH_THEME="ybw-ys"; else ZSH_THEM
 
 plugins=(git
 gitignore
+osx
+cp
+gitignore
+colored-man-pages
 extract
 sudo
 zsh-autosuggestions
