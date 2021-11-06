@@ -74,8 +74,6 @@ if [[ $UNAME =~ "Darwin" ]]; then
   __conda="/opt/homebrew/Caskroom/miniconda/base"
   echo "U are using Mac! I know."
   alias pd="prlctl start"
-  alias python3="/opt/homebrew/bin/python3"
-  alias pip3="/opt/homebrew/bin/pip3"
   alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
   alias sed="gsed"
   alias wifi='/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
@@ -119,9 +117,9 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   win_ip=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
   function pfd2win(){
     # port forward to windows
-    netsh.exe interface portproxy reset > $null
-    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=22222 connectaddress=wsl.local connectport=22 > $null
-    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=23946 connectaddress=wsl.local connectport=23946 > $null
+    netsh.exe interface portproxy reset > /dev/null
+    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=22222 connectaddress=wsl.local connectport=22 > /dev/null
+    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=23946 connectaddress=wsl.local connectport=23946 > /dev/null
   }
   function wsl_hosts(){
     # 把wsl的ip添加到windows的host里面

@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/local/bin/python3
 import pyperclip as ppc
 import sys
 ppc.copy(sys.stdin.read())
