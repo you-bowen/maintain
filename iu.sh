@@ -193,9 +193,9 @@ zsh(){
     plugins(){
         repos_dir="$HOME/.oh-my-zsh/custom/plugins/"
         # plugins: zsh-autosuggestions; zsh-syntax-highlighting; autojump
-        clone -d "zsh-autosuggestions" "$repos_dir" 
-        clone -d "zsh-syntax-highlighting" "$repos_dir"
-        clone -d "autojump" "$repos_dir"
+        git clone "https://github.com/zsh-users/zsh-autosuggestions" "$repos_dir/zsh-autosuggestions" 
+        git clone "https://github.com/zsh-users/zsh-syntax-highlighting" "$repos_dir/zsh-syntax-highlighting"
+        git clone "https://github.com/wting/autojump" "$repos_dir/autojump"
         cd "$repos_dir/autojump" && python3 install.py
 
         rm ~/.zshrc && ln -s $HOME/maintain/.zshrc $HOME
@@ -225,7 +225,7 @@ wsl_desktop(){
 mac_essencial(){
     echo "make sure you have brew installed on your mac!"
     # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    brew install curl wget neofetch git
+    brew install curl wget neofetch git htop
     brew install --cask docker
     # brew install miniconda
     brew install android-platform-tools

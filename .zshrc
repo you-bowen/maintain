@@ -74,8 +74,6 @@ if [[ $UNAME =~ "Darwin" ]]; then
   __conda="/opt/homebrew/Caskroom/miniconda/base"
   echo "U are using Mac! I know."
   alias pd="prlctl start"
-  alias python3="/opt/homebrew/bin/python3"
-  alias pip3="/opt/homebrew/bin/pip3"
   alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
   alias sed="gsed"
   alias wifi='/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
