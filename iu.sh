@@ -191,7 +191,7 @@ zsh(){
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     }
     plugins(){
-        repos_dir="$HOME/.oh-my-zsh/custom/plugins/"
+        repos_dir="$HOME/.oh-my-zsh/custom/plugins"
         # plugins: zsh-autosuggestions; zsh-syntax-highlighting; autojump
         git clone "https://github.com/zsh-users/zsh-autosuggestions" "$repos_dir/zsh-autosuggestions" 
         git clone "https://github.com/zsh-users/zsh-syntax-highlighting" "$repos_dir/zsh-syntax-highlighting"

@@ -18,7 +18,8 @@ alias ggg="gaa && gcmsg '..' && gp"
 alias gitback="git reset . && git checkout . && git clean -df" # git back (to origin)
 alias cae="conda activate"
 alias cde="conda deactivate"
-alias sizeof="du -sh" 
+alias sizeof="du -sh"
+alias t="tmux"
 alias ipip='echo "public IP addr: $(curl -s http://myip.ipip.net)"'
 # hacker
 alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
@@ -103,7 +104,8 @@ if [[ $UNAME =~ "Darwin" ]]; then
   function push-wsl(){
     scp -P 22222 $1 ybw@cpu:~/pwn/target
     scp -P 22222 $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
-  }
+  } 
+  alias wsl-update="ssh -p 22222 ybw@cpu pwn/tools/update.sh"
   cpu_host_update
 elif [[ $UNAME =~ "WSL2" ]]; then
   __conda="$HOME/.miniconda"
@@ -151,7 +153,7 @@ elif [[ $UNAME =~ "Android" ]]; then
 
 else
   __conda="$HOME/.miniconda"
-  alias clash="~/clash/clash -d ~/clash/ > /dev/null 2>&1 &"
+  alias clash="~/apps/clash/clash -d ~/apps/clash/ > /dev/null 2>&1 &"
 fi
 
 # key bindings
@@ -162,7 +164,7 @@ if [ -e "$ZSH/themes/ybw-ys.zsh-theme" ]; then ZSH_THEME="ybw-ys"; else ZSH_THEM
 
 plugins=(git
 gitignore
-osx
+macos
 cp
 gitignore
 colored-man-pages
