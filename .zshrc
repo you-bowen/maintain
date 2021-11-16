@@ -157,9 +157,11 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   function load(){
     if [[ $(service $1 status | grep not) ]];then sudo service $1 start;echo "$1 just started";else echo "$1 is already running";fi
   }
+
   # wsl_hosts $win_ip
   load ssh
-  ~/npc.sh # start npc service if it's not running
+  ~/apps/npc/npc.sh # start npc service if it's not running
+  ~/apps/nebula/nebula.sh # start nebula service if it's not running
 elif [[ $UNAME =~ "Android" ]]; then
   echo "U are using Android! I know"
   sshd
