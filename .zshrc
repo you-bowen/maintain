@@ -123,17 +123,18 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   alias ggg="gaa && gcmsg '..' && /mnt/c/Program\ Files/Git/cmd/git.exe push"
   alias pwncp="cp $desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
   win_ip=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
-  for line in $win_ip
-  do
-    if [ $(echo $line | grep 192.168.100 ) ]; then p2p_ip=$line;fi
-    else res=$line;fi
-  done
-  win_ip=$res
+  # for line in $win_ip
+  # do
+  #   if [ $(echo $line | grep 192.168.100 ) ]; then p2p_ip=$line;echo "p2p";
+  #   else res=$line; echo "else";
+  #   fi
+  # done
+  # win_ip=$res
   function pfd2win(){
     # port forward to windows
     netsh.exe interface portproxy reset > /dev/null
-    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=22222 connectaddress=wsl.local connectport=22 > /dev/null
-    netsh.exe interface portproxy add v4tov4 listenaddress=$win_ip listenport=23946 connectaddress=wsl.local connectport=23946 > /dev/null
+    netsh.exe interface portproxy add v4tov4 listenaddress=$1 listenport=22222 connectaddress=wsl.local connectport=22 > /dev/null
+    netsh.exe interface portproxy add v4tov4 listenaddress=$1 listenport=23946 connectaddress=wsl.local connectport=23946 > /dev/null
   }
   function wsl_hosts(){
     # 把wsl的ip添加到windows的host里面
@@ -143,20 +144,20 @@ elif [[ $UNAME =~ "WSL2" ]]; then
     aoc "wsl.local" "$ip wsl.local" "$hosts"
     # 把win的ip加入到wsl的host里面，如果局域网ip变了就重新进行端口转发
     hosts="/etc/hosts"
-    echo -n "win ip: $win_ip | "
-    win_ip_not_change=$(cat $hosts | grep "$win_ip win.local")
+    echo -n "win ip: $1 | "
+    win_ip_not_change=$(cat $hosts | grep "$1 win.local")
     if [ $win_ip_not_change ]; then 
       echo "not changed."
     else
       echo "Forwarding..."
-      aoc "win.local" "$win_ip win.local" "$hosts"
-      pfd2win
+      aoc "win.local" "$1 win.local" "$hosts"
+      pfd2win $1
     fi
   }
   function load(){
     if [[ $(service $1 status | grep not) ]];then sudo service $1 start;echo "$1 just started";else echo "$1 is already running";fi
   }
-  wsl_hosts
+  # wsl_hosts $win_ip
   load ssh
   ~/npc.sh # start npc service if it's not running
 elif [[ $UNAME =~ "Android" ]]; then
