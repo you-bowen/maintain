@@ -1,6 +1,7 @@
 export ZSH="$HOME/.oh-my-zsh"
 UNAME=$(uname -a)
 # iot
+alias webrepl="python3 ~/apps/webrepl/webrepl_cli.py -p '900900'"
 alias serial="ls /dev | grep usb"
 alias flasher="python3 ~/repos/nodemcu-pyflasher/Main.py &"
 # network
@@ -52,7 +53,12 @@ function dump-server(){
   scp -P $port $server:~/dumped.tgz .
 }
 # awd over
-
+function ssl_cert_install(){
+  acme.sh --install-cert -d $1 \
+  --cert-file      $2/cert.pem  \
+  --key-file       $2/key.pem  \
+  --fullchain-file $2/fullchain.pem \
+}
 function ipof(){
   ping $1 -c 1 | sed -n "1p" | cut -d '(' -f2|cut -d ')' -f1;
 }
@@ -95,9 +101,9 @@ if [[ $UNAME =~ "Darwin" ]]; then
       cpu_ip="192.168.2.249"
     elif [ $wifi_name = "Redmilk" ]; then
       cpu_ip="192.168.43.113"
-    else  cpu_ip="47.110.233.7";fi
+    else  cpu_ip="42.192.46.157";fi
 
-    if [[ -z $(cpu_alive) ]]; then cpu_ip="47.110.233.7"; echo -n "cpu not alive | ";fi
+    if [[ -z $(cpu_alive) ]]; then cpu_ip="42.192.46.157"; echo -n "cpu not alive | ";fi
     cpu_host $cpu_ip
     echo "host {cpu} updated"
   }
@@ -117,6 +123,12 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   alias ggg="gaa && gcmsg '..' && /mnt/c/Program\ Files/Git/cmd/git.exe push"
   alias pwncp="cp $desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
   win_ip=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
+  for line in $win_ip
+  do
+    if [ $(echo $line | grep 192.168.100 ) ]; then p2p_ip=$line;fi
+    else res=$line;fi
+  done
+  win_ip=$res
   function pfd2win(){
     # port forward to windows
     netsh.exe interface portproxy reset > /dev/null
@@ -164,7 +176,7 @@ if [ -e "$ZSH/themes/ybw-ys.zsh-theme" ]; then ZSH_THEME="ybw-ys"; else ZSH_THEM
 
 plugins=(git
 gitignore
-macos
+osx
 cp
 gitignore
 colored-man-pages

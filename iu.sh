@@ -124,7 +124,7 @@ ctf(){
         sudo dpkg --add-architecture i386
         sudo apt-get update
         sudo apt-get dist-upgrade
-        sudo apt-get install -y libc6:i386
+        sudo apt-get install -y libc6:i386 libc6-dev-i386
     }
     pene(){
         repos_dir="$HOME/repos_firmware" 
@@ -170,7 +170,7 @@ docker(){
     nps(){
         read -p "prepare ~/nps/conf first! or you can't continue" xxx
         sudo docker run -d --name nps --net=host \
-            -v ~/nps/conf:/conf \
+            -v ~/nps/conf/:/conf \
             ffdfgdfg/nps
     }
     funcs=(base change_source portainer netdata nps)
