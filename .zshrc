@@ -122,6 +122,7 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   export PATH=/mnt/c/Windows/System32:$PATH
   alias ggg="gaa && gcmsg '..' && /mnt/c/Program\ Files/Git/cmd/git.exe push"
   alias pwncp="cp $desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
+  alias sharedmouse="/mnt/c/Program\ Files\ \(x86\)/ShareMouse/ShareMouse.exe &"
   win_ip=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
   # for line in $win_ip
   # do
