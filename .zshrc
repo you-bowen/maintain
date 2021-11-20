@@ -85,6 +85,7 @@ if [[ $UNAME =~ "Darwin" ]]; then
   alias sed="gsed"
   alias wifi='/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
   alias code-wsl-pwn="code --remote ssh-remote+wsl /home/ybw/pwn"
+  alias sm_restart="killall ShareMouse && open -a ShareMouse"
   function cpu_host(){
     # set host for {cpu}(my windows)
     sudo gsed -i "s/.*cpu/$1 cpu/g" /etc/hosts;
@@ -122,7 +123,8 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   export PATH=/mnt/c/Windows/System32:$PATH
   alias ggg="gaa && gcmsg '..' && /mnt/c/Program\ Files/Git/cmd/git.exe push"
   alias pwncp="cp $desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
-  alias sharedmouse="/mnt/c/Program\ Files\ \(x86\)/ShareMouse/ShareMouse.exe &"
+  alias sm="/mnt/c/Program\ Files\ \(x86\)/ShareMouse/ShareMouse.exe &"
+  alias sm_restart="taskkill.exe /IM  Share\* && sm"
   win_ip=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
   # for line in $win_ip
   # do
