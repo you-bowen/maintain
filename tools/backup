@@ -4,7 +4,7 @@ import os
 import sys
 
 target = sys.argv[1]
-target_bk = target + '_backup' if os.path.isdir(path) else target + '.bak'
+target_bk = target + '_backup' if os.path.isdir(target) else target + '.bak'
 
 if os.path.exists(target_bk):
     choice = input('backup file already exists, delete it? (Y/n)').strip()
