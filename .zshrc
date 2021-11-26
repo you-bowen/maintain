@@ -229,4 +229,4 @@ function nvm_init(){
   # <<< nvm initialize <<<
 }
 
-export PATH=$HOME/pwn/tools:$PATH
+export PATH=$HOME/maintain/tools:$HOME/pwn/tools:$PATH

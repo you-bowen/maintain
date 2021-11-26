@@ -1,0 +1,12 @@
+#!/usr/local/bin/python3
+
+import os
+import sys
+
+target = sys.argv[1]
+target_bk = target + '_backup' if os.path.isdir(path) else target + '.bak'
+
+if os.path.exists(target_bk):
+    os.system(f'rm -rf {target}')
+    os.system(f'cp -r {target_bk} {target}')
+    
