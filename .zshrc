@@ -11,8 +11,8 @@ alias pchain="proxychains4"
 alias google="curl google.com"
 alias baidu="curl baidu.com"
 alias pmod="sudo chmod a+x *" # power mod
-alias idax86="cd ~/pwn/server && ./linux_server"
-alias idax64="cd ~/pwn/server && ./linux_server64"
+alias ida-server-x86="cd ~/pwn/server && ./linux_server"
+alias ida-server-x64="cd ~/pwn/server && ./linux_server64"
 alias pwn="code ~/pwn"
 alias update="cd ~/maintain && git pull && sudo ln -s ~/maintain/tools/* /usr/local/bin"
 alias ggg="gaa && gcmsg '..' && gp"
@@ -85,6 +85,7 @@ if [[ $UNAME =~ "Darwin" ]]; then
   alias sed="gsed"
   alias wifi='/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
   alias code-wsl-pwn="code --remote ssh-remote+wsl /home/ybw/pwn"
+  alias sm="open -a ShareMouse"
   alias sm_restart="killall ShareMouse && open -a ShareMouse"
   function cpu_host(){
     # set host for {cpu}(my windows)
@@ -125,6 +126,8 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   alias pwncp="cp $desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
   alias sm="/mnt/c/Program\ Files\ \(x86\)/ShareMouse/ShareMouse.exe &"
   alias sm_restart="taskkill.exe /IM  Share\* && sm"
+  alias ida-x64="/mnt/c/pwntools/ida75/75ida64.exe -i"
+  alias ida-x86="/mnt/c/pwntools/ida75/75ida.exe -i"
   win_ip=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
   # for line in $win_ip
   # do
@@ -182,7 +185,7 @@ if [ -e "$ZSH/themes/ybw-ys.zsh-theme" ]; then ZSH_THEME="ybw-ys"; else ZSH_THEM
 
 plugins=(git
 gitignore
-osx
+macos
 cp
 gitignore
 colored-man-pages
