@@ -11,8 +11,8 @@ alias pchain="proxychains4"
 alias google="curl google.com"
 alias baidu="curl baidu.com"
 alias pmod="sudo chmod a+x *" # power mod
-alias ida-server-x86="cd ~/pwn/server && ./linux_server"
-alias ida-server-x64="cd ~/pwn/server && ./linux_server64"
+alias ida-server-x86="cd ~/pwn/.server && ./linux_server"
+alias ida-server-x64="cd ~/pwn/.server && ./linux_server64"
 alias pwn="code ~/pwn"
 alias update="cd ~/maintain && git pull && sudo ln -s ~/maintain/tools/* /usr/local/bin"
 alias ggg="gaa && gcmsg '..' && gp"
@@ -22,6 +22,7 @@ alias cde="conda deactivate"
 alias sizeof="du -sh"
 alias t="tmux"
 alias ipip='echo "public IP addr: $(curl -s http://myip.ipip.net)"'
+alias ...="cd ../.."
 # hacker
 alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
 alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
@@ -111,7 +112,7 @@ if [[ $UNAME =~ "Darwin" ]]; then
   }
   function push-wsl(){
     scp -P 22222 $1 ybw@cpu:~/pwn/target
-    scp -P 22222 $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
+    # scp -P 22222 $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
   } 
   alias wsl-update="ssh -p 22222 ybw@cpu pwn/tools/update.sh"
   cpu_host_update
