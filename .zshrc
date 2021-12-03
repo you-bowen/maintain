@@ -82,6 +82,7 @@ if [[ $UNAME =~ "Darwin" ]]; then
   __conda="/opt/homebrew/Caskroom/miniconda/base"
   echo "U are using Mac! I know."
   alias pd="prlctl start"
+  alias mysql="/Applications/phpstudy/Extensions/MySQL5.7.28/bin/mysql"
   alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
   alias sed="gsed"
   alias wifi='/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
@@ -111,7 +112,7 @@ if [[ $UNAME =~ "Darwin" ]]; then
     echo "host {cpu} updated"
   }
   function push-wsl(){
-    scp -P 22222 $1 ybw@cpu:~/pwn/target
+    scp -P 22222 $1 ybw@cpu:~/pwn/.target
     # scp -P 22222 $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
   } 
   alias wsl-update="ssh -p 22222 ybw@cpu pwn/tools/update.sh"
