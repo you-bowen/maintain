@@ -14,7 +14,6 @@ alias pmod="sudo chmod a+x *" # power mod
 alias ida-server-x86="cd ~/pwn/.server && ./linux_server"
 alias ida-server-x64="cd ~/pwn/.server && ./linux_server64"
 alias pwn="code ~/pwn"
-alias update="cd ~/maintain && git pull && sudo ln -s ~/maintain/tools/* /usr/local/bin"
 alias ggg="gaa && gcmsg '..' && gp"
 alias gitback="git reset . && git checkout . && git clean -df" # git back (to origin)
 alias cae="conda activate"
@@ -81,10 +80,11 @@ function aoc(){
 if [[ $UNAME =~ "Darwin" ]]; then
   __conda="/opt/homebrew/Caskroom/miniconda/base"
   echo "U are using Mac! I know."
-  alias pd="prlctl start"
+  alias pd="prlctl"
   alias mysql="/Applications/phpstudy/Extensions/MySQL5.7.28/bin/mysql"
   alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
   alias sed="gsed"
+  alias wsl="ssh ybw@cpu -p 22222"
   alias wifi='/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
   alias code-wsl-pwn="code --remote ssh-remote+wsl /home/ybw/pwn"
   alias sm="open -a ShareMouse"
@@ -112,7 +112,8 @@ if [[ $UNAME =~ "Darwin" ]]; then
     echo "host {cpu} updated"
   }
   function push-wsl(){
-    scp -P 22222 $1 ybw@cpu:~/pwn/.target
+    if [[ $1 ]]; then new_file=$1; else new_file=$HOME'/Downloads/'$(ls -t ~/Downloads | sed -n "1p"); fi
+    scp -P 22222 $new_file ybw@cpu:~/pwn/.target
     # scp -P 22222 $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
   } 
   alias wsl-update="ssh -p 22222 ybw@cpu pwn/tools/update.sh"
