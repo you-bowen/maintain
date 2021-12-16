@@ -173,7 +173,26 @@ docker(){
             -v ~/nps/conf/:/conf \
             ffdfgdfg/nps
     }
-    funcs=(base change_source portainer netdata nps)
+    cloudreve(){
+        local home="$HOME/apps_docker/cloudreve"
+        mkdir -p $home
+        cd $home
+        mkdir uploads config db avatar
+
+        docker run -d \
+            --name cloudreve \
+            -e PUID=1000 \ # optional
+            -e PGID=1000 \ # optional
+            -e TZ="Asia/Shanghai" \ # optional
+            -p 5212:5212 \
+            --restart=unless-stopped \
+            -v $home/uploads:/cloudreve/uploads \
+            -v $home/config:/cloudreve/config \
+            -v $home/db:/cloudreve/db \
+            -v $home/avatar:/cloudreve/avatar \
+            xavierniu/cloudreve
+    }
+    funcs=(base change_source portainer netdata nps cloudreve)
     exec_choice ${funcs[*]}
 
 }
