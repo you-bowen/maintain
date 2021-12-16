@@ -181,9 +181,9 @@ docker(){
 
         docker run -d \
             --name cloudreve \
-            -e PUID=1000 \ # optional
-            -e PGID=1000 \ # optional
-            -e TZ="Asia/Shanghai" \ # optional
+            -e PUID=1000 \
+            -e PGID=1000 \
+            -e TZ="Asia/Shanghai" \
             -p 5212:5212 \
             --restart=unless-stopped \
             -v $home/uploads:/cloudreve/uploads \
