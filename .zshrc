@@ -22,6 +22,8 @@ alias sizeof="du -sh"
 alias t="tmux"
 alias ipip='echo "public IP addr: $(curl -s http://myip.ipip.net)"'
 alias ...="cd ../.."
+alias k9="kill -9"
+alias hhh="hexo clean && hexo g && hexo s"
 # hacker
 alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
 alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
@@ -80,6 +82,7 @@ function aoc(){
 if [[ $UNAME =~ "Darwin" ]]; then
   __conda="/opt/homebrew/Caskroom/miniconda/base"
   echo "U are using Mac! I know."
+  alias service="brew services"
   alias pd="prlctl"
   alias mysql="/Applications/phpstudy/Extensions/MySQL5.7.28/bin/mysql"
   alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
@@ -195,11 +198,13 @@ colored-man-pages
 extract
 sudo
 zsh-autosuggestions
+# zsh-autocomplete
 zsh-syntax-highlighting
 autojump
 )
 	
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50
 
 [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
 autoload -U compinit && compinit -u
