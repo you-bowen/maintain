@@ -38,7 +38,7 @@ elif [ $1 = "node" ]; then
     wget "$server_host:61234/$node_name.key" -O /etc/nebula/host.key
     wget "$server_host:61234/$node_name.crt" -O /etc/nebula/host.crt
     wget "$server_host:61234/ca.crt"         -O /etc/nebula/ca.crt
-    sed "s/100.64.22.11/$server_host/g" config.yml
+    sed -i "s/100.64.22.11/$server_host/g" config.yml
 
     mv config.yml /etc/nebula/config.yaml
 fi
