@@ -146,12 +146,14 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   #   fi
   # done
   # win_ip=$res
-  function pfd2win(){
+  function pfdwin2wsl(){
     # port forward to windows
     netsh.exe interface portproxy reset > /dev/null
     netsh.exe interface portproxy add v4tov4 listenaddress=$1 listenport=22222 connectaddress=wsl.local connectport=22 > /dev/null
     netsh.exe interface portproxy add v4tov4 listenaddress=$1 listenport=23946 connectaddress=wsl.local connectport=23946 > /dev/null
   }
+  # pfdwsl2win 
+  # iptables -t nat -A PREROUTING -p tcp -m tcp --dport 3389 -j DNAT --to-destination $win_ip:3389
   function wsl_hosts(){
     # 把wsl的ip添加到windows的host里面
     hosts="/mnt/c/Windows/System32/drivers/etc/hosts"
@@ -167,7 +169,7 @@ elif [[ $UNAME =~ "WSL2" ]]; then
     else
       echo "Forwarding..."
       aoc "win.local" "$1 win.local" "$hosts"
-      pfd2win $1
+      pfdwin2wsl $1
     fi
   }
   function load(){

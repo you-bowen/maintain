@@ -24,7 +24,7 @@ if [ $1 = "lighthouse" ]; then
     ./nebula-cert sign -name "tx" -ip "192.168.100.4/24"
     mv ca.key ~
 
-    sed -i "/am_lighthouse:\ false/c\am_lighthouse:\ true" config.yaml
+    sed -i "s/am_lighthouse:\ false/am_lighthouse:\ true/g" config.yaml
     sed -i "/\"192.168.100.1\"/d" config.yaml 
 
     sudo ln -s ~/apps/nebula/config.yaml /etc/nebula/config.yaml
