@@ -23,7 +23,11 @@ alias t="tmux"
 alias ipip='echo "public IP addr: $(curl -s http://myip.ipip.net)"'
 alias ...="cd ../.."
 alias k9="kill -9"
+alias ka="killall"
 alias hhh="hexo clean && hexo g && hexo s"
+function code--(){
+  code --remote ssh-remote+$1 $2 
+}
 # hacker
 alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
 alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
@@ -180,7 +184,14 @@ elif [[ $UNAME =~ "Android" ]]; then
 
 else
   __conda="$HOME/.miniconda"
-  alias clash="~/apps/clash/clash -d ~/apps/clash/ > /dev/null 2>&1 &"
+  function clash(){
+    if [ $(pgrep clash) ]; then 
+      echo 'clash is running';
+    else 
+      ~/apps/clash/clash -d ~/apps/clash/ > /dev/null 2>&1 &;
+      echo 'clash launched';
+    fi
+  }
 fi
 
 # key bindings
