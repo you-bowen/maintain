@@ -21,10 +21,11 @@ base(){
     menu "core" "install_my_tools" "git_init" "github_ssh_login_key" "nvim(plugins)"
     core(){
         echo "installing base modules..."
-        sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop python3-pip gcc neovim git proxychains sudo ssh
+        sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop python3-pip gcc neovim git proxychains sudo
         sudo apt-get install -y iproute2 net-tools
         # sudo vim /etc/ssh/sshd_config
         sudo ln -s /usr/bin/python3 /usr/bin/python # mac中无效
+        sudo ln -s /usr/bin/python3 /usr/local/bin/python3 # mac中无效
         read -p "if you want to install&config ssh?(y/n)" xxx
         if [ $xxx == "y" ]; then
             sudo apt-get install openssh-server
@@ -143,7 +144,7 @@ ctf(){
 }
 docker(){
     # docker canbe installed by `apt install docker.io`
-    menu "base" "change_source" "portainer" "netdata" "nps"
+    menu "base" "change_source" "portainer" "netdata" "nps" "cloudreve"
     base(){ read -p "for ubuntu user: " xxx; curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun; }
     portainer(){
         sudo docker run -d -p 9000:9000 -p 8000:8000 \
