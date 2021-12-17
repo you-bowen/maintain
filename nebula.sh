@@ -35,10 +35,11 @@ if [ $1 = "lighthouse" ]; then
 elif [ $1 = "node" ]; then
     echo "[node] install...";
     node_name=$2; server_host=$3
-    wget "$server_host:61234/$node_name.key" -O /etc/nebula/host.key
-    wget "$server_host:61234/$node_name.crt" -O /etc/nebula/host.crt
-    wget "$server_host:61234/ca.crt"         -O /etc/nebula/ca.crt
+    sudo mkdir -p /etc/nebula
+    sudo wget "$server_host:61234/$node_name.key" -O /etc/nebula/host.key
+    sudo wget "$server_host:61234/$node_name.crt" -O /etc/nebula/host.crt
+    sudo wget "$server_host:61234/ca.crt"         -O /etc/nebula/ca.crt
     sed -i "s/100.64.22.11/$server_host/g" config.yml
-
-    mv config.yml /etc/nebula/config.yaml
+    sudo mv config.yml /etc/nebula/config.yaml
 fi
+
