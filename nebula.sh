@@ -14,7 +14,7 @@ else
     chmod a+x *
     echo "binary and config downloaded."
 fi
-
+sudo mkdir -p /etc/nebula
 if [ $1 = "lighthouse" ]; then
     echo "[lighthouse] install...";
     ./nebula-cert ca -name "ybw, Inc"   # gen ca.crt & ca.key
@@ -25,20 +25,21 @@ if [ $1 = "lighthouse" ]; then
     mv ca.key ~
 
     sed -i "/am_lighthouse:\ false/c\am_lighthouse:\ true" config.yml
-    python3 -m http.server 61234
+    
+    sudo mv config.yml /etc/nebula/config.yaml
+    sudo mv ca.crt /etc/nebula/ca.crt
+    sudo mv lighthouse.crt /etc/nebula/host.crt
+    sudo mv lighthouse.key /etc/nebula/host.key
 
-    mv config.yml /etc/nebula/config.yaml
-    mv ca.crt /etc/nebula/ca.crt
-    mv lighthouse.crt /etc/nebula/host.crt
-    mv lighthouse.key /etc/nebula/host.key
+    python3 -m http.server 61234
 
 elif [ $1 = "node" ]; then
     echo "[node] install...";
     node_name=$2; server_host=$3
-    wget "$server_host:61234/$node_name.key" -O /etc/nebula/host.key
-    wget "$server_host:61234/$node_name.crt" -O /etc/nebula/host.crt
-    wget "$server_host:61234/ca.crt"         -O /etc/nebula/ca.crt
+    
+    sudo wget "$server_host:61234/$node_name.key" -O /etc/nebula/host.key
+    sudo wget "$server_host:61234/$node_name.crt" -O /etc/nebula/host.crt
+    sudo wget "$server_host:61234/ca.crt"         -O /etc/nebula/ca.crt
     sed -i "s/100.64.22.11/$server_host/g" config.yml
-
-    mv config.yml /etc/nebula/config.yaml
+    sudo mv config.yml /etc/nebula/config.yaml
 fi
