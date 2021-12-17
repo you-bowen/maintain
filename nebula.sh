@@ -8,7 +8,7 @@ else
     mkdir -p $nebula_home
     cd $nebula_home
     wget https://github.com/slackhq/nebula/releases/download/v1.5.2/nebula-linux-amd64.tar.gz
-    wget https://raw.githubusercontent.com/slackhq/nebula/master/examples/config.yml
+    wget https://raw.githubusercontent.com/slackhq/nebula/master/examples/config.yml -O config.yaml
     tar -xzvf nebula-linux-amd64.tar.gz
     rm nebula-linux-amd64.tar.gz
     chmod a+x *
@@ -24,10 +24,12 @@ if [ $1 = "lighthouse" ]; then
     ./nebula-cert sign -name "tx" -ip "192.168.100.4/24"
     mv ca.key ~
 
-    sed -i "/am_lighthouse:\ false/c\am_lighthouse:\ true" config.yml
+    sed -i "/am_lighthouse:\ false/c\am_lighthouse:\ true" config.yaml
+    sed -i "/\"192.168.100.1\"/d" config.yaml 
+
+    sudo ln -s ~/apps/nebula/config.yaml /etc/nebula/config.yaml
     
-    sudo mv config.yml /etc/nebula/config.yaml
-    sudo mv ca.crt /etc/nebula/ca.crt
+    sudo cp ca.crt /etc/nebula/ca.crt
     sudo mv lighthouse.crt /etc/nebula/host.crt
     sudo mv lighthouse.key /etc/nebula/host.key
 
@@ -44,3 +46,6 @@ elif [ $1 = "node" ]; then
     sudo mv config.yml /etc/nebula/config.yaml
 fi
 
+
+
+# rm *.key *.crt && rm -f /etc/nebula/*
