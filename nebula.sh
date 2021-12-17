@@ -28,7 +28,7 @@ if [ $1 = "lighthouse" ]; then
     sed -i "/\"192.168.100.1\"/d" config.yaml 
 
     sudo ln -s ~/apps/nebula/config.yaml /etc/nebula/config.yaml
-    
+
     sudo cp ca.crt /etc/nebula/ca.crt
     sudo mv lighthouse.crt /etc/nebula/host.crt
     sudo mv lighthouse.key /etc/nebula/host.key
@@ -42,8 +42,8 @@ elif [ $1 = "node" ]; then
     sudo wget "$server_host:61234/$node_name.key" -O /etc/nebula/host.key
     sudo wget "$server_host:61234/$node_name.crt" -O /etc/nebula/host.crt
     sudo wget "$server_host:61234/ca.crt"         -O /etc/nebula/ca.crt
-    sed -i "s/100.64.22.11/$server_host/g" config.yml
-    sudo mv config.yml /etc/nebula/config.yaml
+    sed -i "s/100.64.22.11/$server_host/g" config.yaml
+    sudo ln -s ~/apps/nebula/config.yaml /etc/nebula/config.yaml
 fi
 
 
