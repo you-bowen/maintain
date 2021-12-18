@@ -29,7 +29,8 @@ if [ $1 = "lighthouse" ]; then
     ./nebula-cert sign -name "lighthouse" -ip "192.168.100.1/24"
     ./nebula-cert sign -name "mac" -ip "192.168.100.2/24"
     ./nebula-cert sign -name "wsl" -ip "192.168.100.3/24"
-    ./nebula-cert sign -name "tx" -ip "192.168.100.4/24"
+    ./nebula-cert sign -name "ali" -ip "192.168.100.4/24"
+    ./nebula-cert sign -name "cry" -ip "192.168.100.5/24"
     mv ca.key ~
 
     sed -i "s/am_lighthouse:\ false/am_lighthouse:\ true/g" config.yaml
