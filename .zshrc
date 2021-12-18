@@ -15,8 +15,8 @@ function ipof(){
   ping $1 -c 1 | sed -n "1p" | cut -d '(' -f2|cut -d ')' -f1;
 }
 # apps
-alias nebula="sudo ~/apps/nebula/nebula -config /etc/nebula/config.yaml"
-alias nebula_restart="sudo kill -9 $(pgrep nebula); sudo ~/apps/nebula/nebula -config /etc/nebula/config.yaml"
+alias nebula="sudo ~/apps/nebula/nebula -config /etc/nebula/config.yaml > ~/log/nebula.log 2>&1 &"
+alias nebula_restart="sudo kill -9 $(pgrep nebula); nebula"
 # pwn
 alias ida-server-x86="cd ~/pwn/.server && ./linux_server"
 alias ida-server-x64="cd ~/pwn/.server && ./linux_server64"
@@ -33,8 +33,8 @@ alias cde="conda deactivate"
 alias sizeof="du -sh"
 alias t="tmux"
 alias ...="cd ../.."
-alias k9="kill -9"
-alias ka="killall"
+alias k9="sudo kill -9"
+alias ka="sudo killall"
 alias hhh="hexo clean && hexo g && hexo s"
 alias history_fix="mv ~/.zsh_history ~/.zsh_history_bad && strings ~/.zsh_history_bad > ~/.zsh_history && fc -R ~/.zsh_history"
 function code--(){
