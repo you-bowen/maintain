@@ -61,3 +61,6 @@ fi
 
 
 # rm *.key *.crt && rm -f /etc/nebula/*
+
+# if your mac can't connect to wsl, ping nebula_mac_addr in wsl first.
+# it could help

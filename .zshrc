@@ -18,7 +18,7 @@ function ipof(){
 }
 # apps
 alias nebula="sudo ~/apps/nebula/nebula -config /etc/nebula/config.yaml > ~/log/nebula.log 2>&1 &"
-alias nebula_restart="sudo kill -9 $(pgrep nebula); nebula"
+alias nebula_restart="sudo kill -9 \$(pgrep nebula); nebula"
 # pwn
 alias ida-server-x86="cd ~/pwn/.server && ./linux_server"
 alias ida-server-x64="cd ~/pwn/.server && ./linux_server64"
@@ -27,6 +27,7 @@ alias pwn="code ~/pwn"
 alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
 alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
 # shortcuts
+alias maintain="cd ~/maintain && clash && pon && git pull && ka clash && poff && exec zsh"
 alias pmod="sudo chmod a+x *" # power mod
 alias ggg="gaa && gcmsg '..' && gp"
 alias gitback="git reset . && git checkout . && git clean -df" # git back (to origin)
