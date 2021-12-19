@@ -90,7 +90,7 @@ if [[ $UNAME =~ "Darwin" ]]; then
   function cpu_host_update(){
     # wifi_name=$(wifi -I| awk -F: '/ SSID/{print $2}' | sed 's/^[ \t]*//g')
     if [[ -z $(host_alive 192.168.100.3) ]]; then 
-      cpu_host "love4cry.cn"; 
+      cpu_host "42.192.46.157"; 
       echo -n "cpu not alive | ";
     else
       cpu_host "192.168.100.3";
