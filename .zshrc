@@ -16,6 +16,10 @@ alias ipip='echo "public IP addr: $(curl -s http://myip.ipip.net)"'
 function ipof(){
   ping $1 -c 1 | sed -n "1p" | cut -d '(' -f2|cut -d ')' -f1;
 }
+function host_alive(){
+  a=$(ping $1 -c 1 -t 1 | grep "1 packets received")
+  if [[ $a ]]; then echo "alive";fi
+}
 # apps
 alias nebula="sudo ~/apps/nebula/nebula -config /etc/nebula/config.yaml > ~/log/nebula.log 2>&1 &"
 alias nebula_restart="sudo kill -9 \$(pgrep nebula); nebula"
@@ -82,22 +86,15 @@ if [[ $UNAME =~ "Darwin" ]]; then
     # set host for {cpu}(my windows)
     sudo gsed -i "s/.*cpu/$1 cpu/g" /etc/hosts;
   }
-  function cpu_alive(){
-    a=$(ping $cpu_ip -c 1 -t 1 | grep "1 packets received")
-    if [[ $a ]]; then echo "cpu alive";fi
-  }
-  function cpu_host_update(){
-    # when connect to known wiki: (test cpu alive)?(set host):(set pub ipv4 host)
-    wifi_name=$(wifi -I| awk -F: '/ SSID/{print $2}' | sed 's/^[ \t]*//g')
-    echo -n "current wifi: $wifi_name | "
-    if   [ $wifi_name = "Neri" ]; then
-      cpu_ip="192.168.2.249"
-    elif [ $wifi_name = "Redmilk" ]; then
-      cpu_ip="192.168.43.113"
-    else  cpu_ip="42.192.46.157";fi
 
-    if [[ -z $(cpu_alive) ]]; then cpu_ip="42.192.46.157"; echo -n "cpu not alive | ";fi
-    cpu_host $cpu_ip
+  function cpu_host_update(){
+    # wifi_name=$(wifi -I| awk -F: '/ SSID/{print $2}' | sed 's/^[ \t]*//g')
+    if [[ -z $(host_alive 192.168.100.3) ]]; then 
+      cpu_host "love4cry.cn"; 
+      echo -n "cpu not alive | ";
+    else
+      cpu_host "192.168.100.3";
+    fi
     echo "host {cpu} updated"
   }
   function push-wsl(){
@@ -132,6 +129,8 @@ elif [[ $UNAME =~ "WSL2" ]]; then
     sudo iptables -t nat -t nat -F
     sudo iptables -t nat -A POSTROUTING -j MASQUERADE
     sudo iptables -t nat -A PREROUTING -p tcp -m tcp --dport 3389 -j DNAT --to-destination $win_ip:3389
+    # 还要把wsl的22222转发到wsl的22
+    sudo iptables -t nat -A PREROUTING -p tcp --dport 22222 -j REDIRECT --to-port 22
   }
 
   function wsl_hosts(){
