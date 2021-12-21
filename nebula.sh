@@ -51,7 +51,7 @@ elif [ $1 = "node" ]; then
     sudo wget "$server_host:61234/$node_name.key" -O /etc/nebula/host.key
     sudo wget "$server_host:61234/$node_name.crt" -O /etc/nebula/host.crt
     sudo wget "$server_host:61234/ca.crt"         -O /etc/nebula/ca.crt
-    if [ $node_name = "mac" ]; then
+    if [[ $(uname -a) =~ "Darwin" ]]; then
         sed=gsed;
     fi
     sed -i "s/100.64.22.11/$server_host/g" config.yaml

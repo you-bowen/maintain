@@ -125,6 +125,7 @@ elif [[ $UNAME =~ "WSL2" ]]; then
     netsh.exe interface portproxy add v4tov4 listenaddress=$1 listenport=23946 connectaddress=wsl.local connectport=23946 > /dev/null
   }
   function pfdwsl2win(){
+    ## 每次win开机启动一次就行
     # make sure you have run `sudo echo 1 > /proc/sys/net/ipv4/ip_forward` in the root mode
     sudo iptables -t nat -t nat -F
     sudo iptables -t nat -A POSTROUTING -j MASQUERADE
@@ -134,8 +135,8 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   }
 
   function wsl_hosts(){
-    ### wsl每次启动时的ip和win上面的虚拟网卡都不一样
-    
+    ### win每次开机时 wsl的ip和win上面的虚拟网卡都不一样
+    ## 每次win开机的时候启动一次就行
     # 把wsl的ip添加到windows的host里面->让ida能够轻松的debug
     hosts="/mnt/c/Windows/System32/drivers/etc/hosts"
     ip=$(ip add | grep inet | grep eth0 | awk -F" " '{print $2}' | cut -d"/" -f 1)

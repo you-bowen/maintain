@@ -15,10 +15,11 @@ menu "base"\
      "ubt_Desktop_essential"\
      "zsh(twice)"\
      "wsl_desktop"\
-     "termux"
+     "termux"\
+     "vps_setup"
 
 base(){
-    menu "core" "install_my_tools" "git_init" "github_ssh_login_key" "nvim(plugins)"
+    menu "core" "git_init" "github_ssh_login_key" "nvim(plugins)"
     core(){
         echo "installing base modules..."
         sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop python3-pip gcc neovim git proxychains sudo
@@ -34,7 +35,6 @@ base(){
             echo "you can run:  systemctl enable ssh"
         fi
     }
-    i_tools(){ sudo ln -s ~/maintain/tools/* /usr/local/bin/ && sudo chmod a+x /usr/local/bin/*;echo "pip3 install requirements before u use!"; }
     git_init(){
         ssh-keygen -t rsa -C "2756456886@qq.com"
         cat ~/.ssh/id_rsa.pub
@@ -44,7 +44,7 @@ base(){
     }
     github_ssh_login_key(){ bash <(curl -fsSL love4cry.cn/key.sh) -g you-bowen; }
     NVIM(){ curl -sLf https://spacevim.org/install.sh | bash; }
-    funcs=(core i_tools git_init github_ssh_login_key NVIM)
+    funcs=(core git_init github_ssh_login_key NVIM)
     exec_choice ${funcs[*]}
 }
 ctf(){
@@ -261,5 +261,41 @@ termux(){
     ln -s /storage/emulated/0/Android/data/com.tencent.mobileqq/Tencent/QQfile_recv ~/storage/qq_file_recv
     echo "more info, please goto wiki: https://wiki.termux.com/wiki/Main_Page"
 }
-funcs=(base ctf docker Desktop zsh wsl_desktop termux)
+vps_setup(){
+    if [ ! -e router ]; then echo "dir `router` not exists, exit!"; exit 1; fi
+    ## nginx
+    apt install speedtest-cli nginx
+    service nginx start
+
+    ## acme
+    read -p "please input your domain name: " domain
+    sed -i 's/www.example.com/$domain/g' acme/issuer.sh 
+    sed -i 's/www.example.com/$domain/g' start.sh 
+    sed -i 's/www.example.com/$domain/g' xray/config.json 
+
+    bash acme/daemon.sh 
+    bash acme/register.sh
+    bash acme/issuer.sh 
+
+    ## xray
+    bash start.sh 
+    docker logs -f --tail 20 xray
+
+    ## bbr
+    if [ $(lsmod | grep bbr) ]; then
+        echo "bbr already loaded."
+    else
+        echo -e "进入root 输入以下指令:\n"\
+             "sudo modprobe tcp_bbr    # 加载模块\n"\
+             'echo "tcp_bbr" >> /etc/modules-load.d/modules.conf\n'\
+             'echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf\n'\
+             'echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf\n'\
+             'sysctl -p'
+            # sysctl -p 保存生效
+            # 检测bbr状态
+            # sysctl net.ipv4.tcp_available_congestion_control
+            # sysctl net.ipv4.tcp_congestion_control
+    fi
+}
+funcs=(base ctf docker Desktop zsh wsl_desktop termux vps_setup)
 exec_choice ${funcs[*]}
