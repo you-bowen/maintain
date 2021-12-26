@@ -19,7 +19,7 @@ menu "base"\
      "vps_setup"
 
 base(){
-    menu "core" "git_init" "github_ssh_login_key" "nvim(plugins)"
+    menu "core" "git_init" "github_ssh_login_key" "nvim(plugins)" "etc_sudoers"
     core(){
         echo "installing base modules..."
         sudo apt-get update && sudo apt-get install -y wget vim curl neofetch zsh htop python3-pip gcc neovim git proxychains sudo
@@ -30,9 +30,17 @@ base(){
         read -p "if you want to install&config ssh?(y/n)" xxx
         if [ $xxx == "y" ]; then
             sudo apt-get install openssh-server
-            sudo sed -i "/PasswordAuthentication/c PasswordAuthentication yes" /etc/ssh/sshd_config
+            read -p "enable Password Authentication?(ENTER to continue, any content to jump.)" xxx
+            if [ ! $xxx ];then
+                sudo sed -i "/PasswordAuthentication/c PasswordAuthentication yes" /etc/ssh/sshd_config
+            fi
             sudo service ssh restart
             echo "you can run:  systemctl enable ssh"
+        fi
+        read -p "if you want to modify hostname?(y/n)" xxx
+        if [ $xxx == "y" ]; then
+            read -p "input new hostname:" hostname
+            sudo hostnamectl set-hostname $hostname
         fi
     }
     git_init(){
@@ -44,6 +52,11 @@ base(){
     }
     github_ssh_login_key(){ bash <(curl -fsSL love4cry.cn/key.sh) -g you-bowen; }
     NVIM(){ curl -sLf https://spacevim.org/install.sh | bash; }
+    etc_sudoers(){
+        read -p "1. will modify [sudo]->NOPASSWD; 2. preserve proxy env to root" xxx
+        sudo sed -i "/^%sudo/s/ALL$/NOPASSWD:\ ALL/g" /etc/sudoers
+        sudo sed -i "/env_reset/a\Defaults  env_keep += \"http_proxy https_proxy all_proxy\"" /etc/sudoers
+    }
     funcs=(core git_init github_ssh_login_key NVIM)
     exec_choice ${funcs[*]}
 }
@@ -145,7 +158,7 @@ ctf(){
 docker(){
     # docker canbe installed by `apt install docker.io`
     menu "base" "change_source" "portainer" "netdata" "nps" "cloudreve"
-    base(){ read -p "for ubuntu user: " xxx; curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun; }
+    base(){ read -p "this is for ubuntu user: " xxx; curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun; }
     portainer(){
         sudo docker run -d -p 9000:9000 -p 8000:8000 \
             -v /var/run/docker.sock:/var/run/docker.sock \
