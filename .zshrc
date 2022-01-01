@@ -45,6 +45,7 @@ alias k9="sudo kill -9"
 alias ka="sudo killall"
 alias hhh="hexo clean && hexo g && hexo s"
 alias history_fix="mv ~/.zsh_history ~/.zsh_history_bad && strings ~/.zsh_history_bad > ~/.zsh_history && fc -R ~/.zsh_history"
+alias lt="ls -t"
 function code--(){
   code --remote ssh-remote+$1 $2 
 }
@@ -82,6 +83,8 @@ if [[ $UNAME =~ "Darwin" ]]; then
   alias code-wsl-pwn="code --remote ssh-remote+wsl /home/ybw/pwn"
   alias sm="open -a ShareMouse"
   alias sm_restart="killall ShareMouse && open -a ShareMouse"
+  alias qq="ka QQ; open -a QQ"
+  alias clash="ka ClashX; open -a ClashX"
   function cpu_host(){
     # set host for {cpu}(my windows)
     sudo gsed -i "s/.*cpu/$1 cpu/g" /etc/hosts;
@@ -237,3 +240,4 @@ function nvm_init(){
 }
 
 export PATH=$HOME/maintain/tools:$HOME/pwn/tools:$PATH
+export PATH=$PATH:$HOME/.pkg_uninstaller
