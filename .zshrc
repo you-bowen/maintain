@@ -130,7 +130,8 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   function pfdwsl2win(){
     ## 每次win开机启动一次就行
     # make sure you have run `sudo echo 1 > /proc/sys/net/ipv4/ip_forward` in the root mode
-    sudo iptables -t nat -t nat -F
+    sudo bash -c "sudo echo 1 > /proc/sys/net/ipv4/ip_forward" # it'll be reset to '0' when reboot windows
+    sudo iptables -t nat -F
     sudo iptables -t nat -A POSTROUTING -j MASQUERADE
     sudo iptables -t nat -A PREROUTING -p tcp -m tcp --dport 3389 -j DNAT --to-destination $win_ip:3389
     # 还要把wsl的22222转发到wsl的22
