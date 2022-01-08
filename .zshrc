@@ -1,5 +1,11 @@
 export ZSH="$HOME/.oh-my-zsh"
 UNAME=$(uname -a)
+# docker
+alias dkr="docker run"
+alias dkb="docker build"
+alias dkp="docker pull"
+alias dkbt="docker build -t"
+alias dkrmit="docker run --rm -it"
 # iot
 alias webrepl="python3 ~/apps/webrepl/webrepl_cli.py -p '900900'"
 alias serial="ls /dev | grep usb"
@@ -7,6 +13,7 @@ alias flasher="python3 ~/repos/nodemcu-pyflasher/Main.py &"
 # network
 alias proxyoff="export https_proxy='' http_proxy='' all_proxy=''"
 alias proxyon="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890"
+alias http_proxy="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890"
 alias pon="proxyon"
 alias poff="proxyoff"
 alias pchain="proxychains4"
@@ -85,6 +92,15 @@ if [[ $UNAME =~ "Darwin" ]]; then
   alias sm_restart="killall ShareMouse && open -a ShareMouse"
   alias qq="ka QQ; open -a QQ"
   alias clash="ka ClashX; open -a ClashX"
+  alias trending="~/apps_docker/github_trending/run.sh"
+  alias disable_sleep="sudo pmset -b sleep 0; sudo pmset -b disablesleep 1"
+  alias enable_sleep="sudo pmset -b sleep 1; sudo pmset -b disablesleep 0"
+  # check sleep status
+  a=$(sudo pmset -g custom | egrep -c '^\ sleep.*0$')
+  if [ $a = 2 ]; then 
+    echo "warning: you are keeping sleep disabled, which is dangerous!"
+    echo "use 'disable_sleep' to stop it."
+  fi
   function cpu_host(){
     # set host for {cpu}(my windows)
     sudo gsed -i "s/.*cpu/$1 cpu/g" /etc/hosts;
@@ -104,7 +120,7 @@ if [[ $UNAME =~ "Darwin" ]]; then
     if [[ $1 ]]; then new_file=$1; else new_file=$HOME'/Downloads/'$(ls -t ~/Downloads | sed -n "1p"); fi
     scp -P 22222 $new_file ybw@cpu:~/pwn/.target
     # scp -P 22222 $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
-  } 
+  }
   cpu_host_update
 elif [[ $UNAME =~ "WSL2" ]]; then
   __conda="$HOME/.miniconda"

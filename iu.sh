@@ -258,7 +258,7 @@ wsl_desktop(){
 mac_essencial(){
     echo "make sure you have brew installed on your mac!"
     # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    brew install curl wget neofetch git htop
+    brew install curl wget neofetch git htop iproute2mac
     brew install --cask docker
     # brew install miniconda
     brew install android-platform-tools
