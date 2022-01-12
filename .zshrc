@@ -79,6 +79,14 @@ function aoc(){
     sudo chmod a+w $3 && sudo echo "$2" >> $3 # add
   fi
 }
+function clash(){
+  if [ $(pgrep clash) ]; then 
+    echo 'clash is running';
+  else 
+    ~/apps/clash/clash -d ~/apps/clash/ > /dev/null 2>&1 &;
+    echo 'clash launched';
+  fi
+}
 if [[ $UNAME =~ "Darwin" ]]; then
   __conda="/opt/homebrew/Caskroom/miniconda/base"
   # use gnu cmds in your mac.
@@ -194,14 +202,6 @@ elif [[ $UNAME =~ "Android" ]]; then
 
 else
   __conda="$HOME/.miniconda"
-  function clash(){
-    if [ $(pgrep clash) ]; then 
-      echo 'clash is running';
-    else 
-      ~/apps/clash/clash -d ~/apps/clash/ > /dev/null 2>&1 &;
-      echo 'clash launched';
-    fi
-  }
 fi
 
 # key bindings
