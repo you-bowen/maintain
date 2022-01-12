@@ -6,6 +6,7 @@ os.environ['PATH'] = "/opt/homebrew/opt/coreutils/libexec/gnubin:" + os.environ[
 to_run = []
 
 opt = "-t" if os.uname()[0] == 'Darwin' else "-W" # -W for linux and -t for mac
+flag = "100.0%" if os.uname()[0] == 'Darwin' else "100%"
 for i in range(1,6):
     cmd = f"ping -c 1 {opt} 1 192.168.100.{i}"
     to_run.append(cmd)
@@ -15,7 +16,7 @@ ips = re.findall("---.*---", res)
 ips = [re.search("192.168.100.(\d+)", i).group() for i in ips]
 status = re.split("---.*---", res)[1:]
 status = [i.split("\n")[1] for i in status]
-status = [('100.0% packet loss' not in i) for i in status]
+status = [(f'{flag} packet loss' not in i) for i in status]
 
 for k,v in dict(zip(ips, status)).items():    
     print(f"{k} is up") if v else print(f"{k} is down")

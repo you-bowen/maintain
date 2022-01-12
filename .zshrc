@@ -83,7 +83,7 @@ function clash(){
   if [ $(pgrep clash) ]; then 
     echo 'clash is running';
   else 
-    ~/apps/clash/clash -d ~/apps/clash/ > /dev/null 2>&1 &;
+    ~/apps/clash/clash -d ~/apps/clash/ > ~/log/clash.log 2>&1 &;
     echo 'clash launched';
   fi
 }
