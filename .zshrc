@@ -6,6 +6,7 @@ alias dkb="docker build"
 alias dkp="docker pull"
 alias dkbt="docker build -t"
 alias dkrmit="docker run --rm -it"
+alias dkrmit-cache="docker run --rm -it -v ~/misc/apt-cache-cqupt:/var/lib/apt/lists"
 # iot
 alias webrepl="python3 ~/apps/webrepl/webrepl_cli.py -p '900900'"
 alias serial="ls /dev | grep usb"
@@ -14,6 +15,7 @@ alias flasher="python3 ~/repos/nodemcu-pyflasher/Main.py &"
 alias proxyoff="export https_proxy='' http_proxy='' all_proxy=''"
 alias proxyon="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890"
 alias http_proxy="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890"
+alias burp_proxy="export https_proxy=http://127.0.0.1:8080 http_proxy=http://127.0.0.1:8080"
 alias pon="proxyon"
 alias poff="proxyoff"
 alias pchain="proxychains4"
@@ -79,6 +81,9 @@ function aoc(){
 }
 if [[ $UNAME =~ "Darwin" ]]; then
   __conda="/opt/homebrew/Caskroom/miniconda/base"
+  # use gnu cmds in your mac.
+  # add a "gnubin" directory to your PATH from your bashrc like:
+  # PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
   echo "U are using Mac! I know."
   alias service="brew services"
   alias pd="prlctl"

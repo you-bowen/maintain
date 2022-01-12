@@ -6,6 +6,14 @@
 build之后打上标签🏷️
 格式：`utils/ubuntu:[arch]`
 
+## 基础镜像特性
+
+- 使用cqupt源加速
+- 工具集：vim-tiny wget git
+- tzdata install and config to Shanghai
+- rm apt cache in the end.
+
+
 ```shell
 dkbt utils/ubuntu:arm64 arm64/ubuntu2004
 dkbt utils/ubuntu:amd64 amd64/ubuntu2004
