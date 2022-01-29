@@ -1,12 +1,17 @@
 export ZSH="$HOME/.oh-my-zsh"
 UNAME=$(uname -a)
+# global_variables
+export GITHUB_USER="you-bowen"
 # docker
-alias dkr="docker run"
-alias dkb="docker build"
-alias dkp="docker pull"
-alias dkbt="docker build -t"
-alias dkrmit="docker run --rm -it"
-alias dkrmit-cache="docker run --rm -it -v ~/misc/apt-cache-cqupt:/var/lib/apt/lists"
+alias dk-r="docker run"
+alias dk-b="docker build"
+alias dk-p="docker pull"
+alias dk-bt="docker build -t"
+alias dk-rmit="docker run --rm -it"
+alias dk-rmit-cache="docker run --rm -it -v ~/misc/apt-cache-cqupt:/var/lib/apt/lists"
+alias dk-c="docker-compose"
+alias dk-show-net="docker inspect --format='{{.Name}} - {{.HostConfig.NetworkMode}} - {{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)"
+function dk-c-build-up(){ docker-compose -f $1 build && docker-compose -f $1 up }
 # iot
 alias webrepl="python3 ~/apps/webrepl/webrepl_cli.py -p '900900'"
 alias serial="ls /dev | grep usb"
@@ -55,6 +60,12 @@ alias ka="sudo killall"
 alias hhh="hexo clean && hexo g && hexo s"
 alias history_fix="mv ~/.zsh_history ~/.zsh_history_bad && strings ~/.zsh_history_bad > ~/.zsh_history && fc -R ~/.zsh_history"
 alias lt="ls -t"
+alias wnb="watch -n 1 nbtest"
+alias grepo="git init && \
+            gaa && gcmsg '..' && \
+            gb -M main && \
+            git remote add origin https://github.com/$GITHUB_USER/${PWD##*/}.git && \
+            gp -u origin main"
 function code--(){
   code --remote ssh-remote+$1 $2 
 }
@@ -152,11 +163,14 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   win_ip_lan=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
   win_ip=$(ip route show | sed -n "1p" | awk -F" " '{print $3}') # 对应win的wsl虚拟网卡的ip
   function pfdwin2wsl(){
+    # 访问win的时候被转发到wsl, 需要先执行wsl hosts, 更新wsl的ip
+    # show: netsh interface portproxy show all
     netsh.exe interface portproxy reset > /dev/null
     netsh.exe interface portproxy add v4tov4 listenaddress=$1 listenport=22222 connectaddress=wsl.local connectport=22 > /dev/null
     netsh.exe interface portproxy add v4tov4 listenaddress=$1 listenport=23946 connectaddress=wsl.local connectport=23946 > /dev/null
   }
   function pfdwsl2win(){
+    # 访问wsl的时候被转发到win
     ## 每次win开机启动一次就行
     # make sure you have run `sudo echo 1 > /proc/sys/net/ipv4/ip_forward` in the root mode
     sudo bash -c "sudo echo 1 > /proc/sys/net/ipv4/ip_forward" # it'll be reset to '0' when reboot windows
@@ -222,6 +236,8 @@ zsh-autosuggestions
 # zsh-autocomplete
 zsh-syntax-highlighting
 autojump
+docker
+docker-compose
 )
 	
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"

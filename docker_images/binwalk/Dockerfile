@@ -11,4 +11,4 @@ RUN apt install --no-install-recommends -y squashfs-tools \
     && ./build.sh 
 
 # comment it for 'noentry'
-# ENTRYPOINT ["binwalk"]
+ENTRYPOINT ["binwalk"]

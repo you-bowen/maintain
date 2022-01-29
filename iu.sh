@@ -104,13 +104,13 @@ ctf(){
 
 
         # LibcSearcher
-        cd "$repos_dir" && git clone https://github.com/lieanu/LibcSearcher.git
-        cd LibcSearcher && sudo python3 setup.py develop
-        cd libc-database || exit 
-        ./add ~/repos_pwn/glibc-all-in-one/libs/2.23-0ubuntu11.3_i386/libc.so.6     # 本地调试 ubt16 x86
-        ./add ~/repos_pwn/glibc-all-in-one/libs/2.23-0ubuntu11.3_amd64/libc.so.6    # 本地调试 ubt16 x64
-        ./add ~/pwn/buuoj/16/64/libc.so.6   # 线上调试 ubt16 x64
-        ./add ~/pwn/buuoj/16/32/libc.so.6   # 线上调试 ubt16 x86
+        # cd "$repos_dir" && git clone https://github.com/lieanu/LibcSearcher.git
+        # cd LibcSearcher && sudo python3 setup.py develop
+        # cd libc-database || exit 
+        # ./add ~/repos_pwn/glibc-all-in-one/libs/2.23-0ubuntu11.3_i386/libc.so.6     # 本地调试 ubt16 x86
+        # ./add ~/repos_pwn/glibc-all-in-one/libs/2.23-0ubuntu11.3_amd64/libc.so.6    # 本地调试 ubt16 x64
+        # ./add ~/pwn/buuoj/16/64/libc.so.6   # 线上调试 ubt16 x64
+        # ./add ~/pwn/buuoj/16/32/libc.so.6   # 线上调试 ubt16 x86
         
         # patchElf
         sudo apt-get install -y autoconf automake libtool 
