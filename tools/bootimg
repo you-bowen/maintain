@@ -23,7 +23,7 @@ if not (args.extract and args.kernel):
 os.system(f"{HOME}/unpackimg.sh {args.extract}")
 # 2. 替换文件
 assert args.kernel.endswith("dtb")
-os.system(f"mv {args.kernel} {HOME}/split_img/boot.img-kernel")
+os.system(f"cp {args.kernel} {HOME}/split_img/boot.img-kernel")
 # 3. 创建boot.img
 os.system(f"{HOME}/repackimg.sh")
 # 4. 把成品拷贝过来
