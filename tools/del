@@ -1,4 +1,8 @@
 #!/usr/local/bin/python3
+"""
+create a rubbish bin in home dir, the bin's max size is limited.
+new part will cover the old part
+"""
 import os
 import pickle
 import sys

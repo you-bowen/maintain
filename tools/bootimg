@@ -1,0 +1,30 @@
+#!/usr/local/bin/python3
+
+import os
+import argparse
+parser = argparse.ArgumentParser(
+    description="patch boot.img easier!",
+    usage="bootimg -x "
+)
+parser.add_argument('-x','--extract', type=str, help="extract boot.img into a dir")
+parser.add_argument('-k','--kernel',  type=str, help="the .dtb file of built-kernel")
+args = parser.parse_args()
+# 一步到位
+HOME = f'{os.environ["HOME"]}/repos/AIK-Linux'
+if not os.path.exists(HOME):
+    os.makedirs(HOME)
+    os.system(f"git clone https://github.com/draekko/AIK-Linux {HOME}")
+
+if not (args.extract and args.kernel):
+    print("args not supported")
+    exit()
+
+# 1. 解压boot.img
+os.system(f"{HOME}/unpackimg.sh {args.extract}")
+# 2. 替换文件
+assert args.kernel.endswith("dtb")
+os.system(f"mv {args.kernel} {HOME}/split_img/boot.img-kernel")
+# 3. 创建boot.img
+os.system(f"{HOME}/repackimg.sh")
+# 4. 把成品拷贝过来
+os.system(f"cp {HOME}/image-new.img {os.getcwd()}")

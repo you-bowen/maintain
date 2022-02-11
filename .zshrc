@@ -27,6 +27,7 @@ alias pchain="proxychains4"
 alias google="curl google.com"
 alias baidu="curl baidu.com"
 alias ipip='echo "public IP addr: $(curl -s http://myip.ipip.net)"'
+alias tarAfromB="tar cfzv $1 $2"
 function ipof(){
   ping $1 -c 1 | sed -n "1p" | cut -d '(' -f2|cut -d ')' -f1;
 }

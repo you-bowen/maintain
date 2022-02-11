@@ -1,4 +1,7 @@
 #!/usr/local/bin/python3
+"""
+this is a script write for nebula network connection test
+"""
 import os
 import re
 

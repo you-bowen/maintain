@@ -1,6 +1,8 @@
 #!/usr/local/bin/python3
 # -*- coding:utf-8 -*-
-
+"""
+create vscode template
+"""
 import json
 import os
 import sys

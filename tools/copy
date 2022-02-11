@@ -1,4 +1,7 @@
 #!/usr/local/bin/python3
+"""
+copy the text to clip board
+"""
 import pyperclip as ppc
 import sys
 ppc.copy(sys.stdin.read())

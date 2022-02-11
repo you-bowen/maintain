@@ -1,5 +1,8 @@
 #!/usr/local/bin/python3
-
+"""
+this is a simple command for recover file or directory
+it's compatible with the `backup` command
+"""
 import os
 import sys
 
