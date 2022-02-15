@@ -1,0 +1,51 @@
+#!/usr/local/bin/python3
+import os
+with open("template","r") as f:
+    content = f.read()
+
+class Node:
+    def __init__(self, name):
+        self.childs = []
+        self.name = name
+
+    def traverse(self, level=-1):
+        if level >= 0:
+            print(f"{4*level*' '}{self.name}")
+        for child in self.childs:
+            child.traverse(level+1)
+    
+    def make_tree(self, parent_path=".", level=-1):
+        if level >= 0 and self.name != "":
+            # self.name 非空的时候才创建文件或者目录
+            # 这种特性也能帮助我们创建空的文件夹
+            parent_path = f"{parent_path}/{self.name}"
+            self.create(parent_path)
+        for child in self.childs:
+            child.make_tree(parent_path, level+1)
+    
+    def create(self, path):
+        if self.childs:
+            os.mkdir(path)
+        else:
+            with open(path, "w") as f:
+                pass
+
+
+level_calc = lambda line : (len(line) - len(line.lstrip())) // 4
+
+def gen(LEVEL, root, content):
+    if content == []:
+        return
+    
+    lv_list = [level_calc(line) for line in content]
+    idx_list = [i for i,lv in enumerate(lv_list) if lv == LEVEL] + [len(content)] # [0, 2, 14]
+    groups_content = [content[idx_list[i]:idx_list[i+1]] for i in range(len(idx_list) - 1)]
+
+    for group_content in groups_content:
+        node = Node(group_content[0].lstrip())
+        root.childs.append(node)
+        gen(LEVEL + 1, node, group_content[1:])
+
+ROOT = Node(".")
+gen(0, ROOT, content.split("\n"))
+ROOT.make_tree()

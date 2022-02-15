@@ -1,0 +1,19 @@
+#!/usr/local/bin/python3
+from private import tinypng_key
+import sys
+import os
+import tinify
+
+if sys.argv[1:] == []:
+    print("usage: tinify <src> [dst]")
+    exit()
+
+tinify.key = tinypng_key
+source = tinify.from_file(sys.argv[1])
+if sys.argv[2:] == []:
+    old_name = sys.argv[1].split("/")[-1]
+    a, b = old_name.split(".")
+    new_name = f"{a}_tiny.{b}"
+else:
+    new_name = sys.argv[2]
+source.to_file(new_name)

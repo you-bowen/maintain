@@ -50,8 +50,8 @@ alias maintain="cd ~/maintain && clash && pon && sleep 0.3 && git pull && ka cla
 alias pmod="sudo chmod a+x *" # power mod
 alias ggg="gaa && gcmsg '..' && gp"
 alias gitback="git reset . && git checkout . && git clean -df" # git back (to origin)
-alias cae="conda activate"
-alias cde="conda deactivate"
+alias ca="conda activate"
+alias cda="conda deactivate"
 alias sizeof="du -sh"
 alias t="tmux"
 alias pg="pgrep"
@@ -62,6 +62,7 @@ alias hhh="hexo clean && hexo g && hexo s"
 alias history_fix="mv ~/.zsh_history ~/.zsh_history_bad && strings ~/.zsh_history_bad > ~/.zsh_history && fc -R ~/.zsh_history"
 alias lt="ls -t"
 alias wnb="watch -n 1 nbtest"
+alias twrp="fastboot flash recovery $1"
 alias grepo="git init && \
             gaa && gcmsg '..' && \
             gb -M main && \
