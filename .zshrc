@@ -1,93 +1,22 @@
+plugins=()
 export ZSH="$HOME/.oh-my-zsh"
-UNAME=$(uname -a)
-# global_variables
 export PATH=$HOME/maintain/tools:$HOME/pwn/tools:$PATH
 export PATH=$PATH:$HOME/.pkg_uninstaller
 export GITHUB_USER="you-bowen"
-# docker
-alias dk-r="docker run"
-alias dk-b="docker build"
-alias dk-p="docker pull"
-alias dk-bt="docker build -t"
-alias dk-rmit="docker run --rm -it"
-alias dk-rmit-cache="docker run --rm -it -v ~/misc/apt-cache-cqupt:/var/lib/apt/lists"
-alias dk-c="docker-compose"
-alias dk-show-net="docker inspect --format='{{.Name}} - {{.HostConfig.NetworkMode}} - {{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' \$(docker ps -aq)"
-function dk-c-build-up(){ docker-compose -f $1 build && docker-compose -f $1 up }
-# iot
-alias webrepl="python3 ~/apps/webrepl/webrepl_cli.py -p '900900'"
-alias serial="ls /dev | grep usb"
-alias flasher="python3 ~/repos/nodemcu-pyflasher/Main.py &"
-# network
-alias proxyoff="export https_proxy='' http_proxy='' all_proxy=''"
-alias proxyon="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890"
-alias http_proxy="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890"
-alias burp_proxy="export https_proxy=http://127.0.0.1:8080 http_proxy=http://127.0.0.1:8080"
-alias pon="proxyon"
-alias poff="proxyoff"
-alias pchain="proxychains4"
-alias google="curl google.com"
-alias baidu="curl baidu.com"
-alias ipip='echo "public IP addr: $(curl -s http://myip.ipip.net)"'
-alias tarAfromB="tar cfzv $1 $2"
-
-# apps
+plugins+=(
+  dk    # docker
+  iot   # iot
+  ctf   # ctf
+  ops   # 一些比较基础、通用的运维操作
+  proxy # 代理相关
+)
 alias nebula="sudo ~/apps/nebula/nebula -config /etc/nebula/config.yaml > ~/log/nebula.log 2>&1 &"
 alias nebula_restart="sudo kill -9 \$(pgrep nebula); nebula"
-# pwn
-alias ida-server-x86="cd ~/pwn/.server && ./linux_server"
-alias ida-server-x64="cd ~/pwn/.server && ./linux_server64"
-alias pwn="code ~/pwn"
-# ctf-web
-alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.0.0'
-alias trojan="echo '<?php @eval(\$_POST['attack']);?>'"
-# shortcuts
 alias maintain="cd ~/maintain && clash && pon && sleep 0.3 && git pull && ka clash && poff && exec zsh"
-alias pmod="sudo chmod a+x *" # power mod
-alias ggg="gaa && gcmsg '..' && gp"
-alias gitback="git reset . && git checkout . && git clean -df" # git back (to origin)
-alias ca="conda activate"
-alias cda="conda deactivate"
-alias sizeof="du -sh"
-alias t="tmux"
-alias pg="pgrep"
-alias ...="cd ../.."
-alias k9="sudo kill -9"
-alias ka="sudo killall"
-alias hhh="hexo clean && hexo g && hexo s"
-alias history_fix="mv ~/.zsh_history ~/.zsh_history_bad && strings ~/.zsh_history_bad > ~/.zsh_history && fc -R ~/.zsh_history"
-alias lt="ls -t"
-alias wnb="watch -n 1 nbtest"
 alias twrp="fastboot flash recovery $1"
-alias grepo="git init && \
-            gaa && gcmsg '..' && \
-            gb -M main && \
-            git remote add origin https://github.com/$GITHUB_USER/${PWD##*/}.git && \
-            gp -u origin main"
-function code--(){
-  code --remote ssh-remote+$1 $2 
-}
-function ssl_cert_install(){
-  acme.sh --install-cert -d $1 \
-  --cert-file      $2/cert.pem  \
-  --key-file       $2/key.pem  \
-  --fullchain-file $2/fullchain.pem \
-}
-function killport(){
-  kill -9 $(lsof -i:$1 | sed -n "2p" | cut -d " " -f 2)
-}
-gsed_fail=$(which gsed | grep "found")
-if [ $gsed_fail ];then sed=sed;else sed=gsed;fi
-function aoc(){
-  # add if exist else change (add or change)
-  # 3args: "keyword" "context... keyword" file_location
-  line=$(cat -n $3| grep -w $1 | awk -F" " '{print $1}')
-  if [ $line ]; then
-    sudo $sed -i "$line c\\$2" $3             # change
-  else
-    sudo chmod a+w $3 && sudo echo "$2" >> $3 # add
-  fi
-}
+alias hhh="hexo clean && hexo g && hexo s"
+alias wnb="watch -n 1 nbtest"
+
 function clash(){
   if [ $(pgrep clash) ]; then 
     echo 'clash is running';
@@ -96,139 +25,40 @@ function clash(){
     echo 'clash launched';
   fi
 }
+
+# >>> load plugin by system
+UNAME=$(uname -a)
 if [[ $UNAME =~ "Darwin" ]]; then
-  __conda="/opt/homebrew/Caskroom/miniconda/base"
-  # use gnu cmds in your mac.
-  # add a "gnubin" directory to your PATH from your bashrc like:
-  # PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
-  echo "U are using Mac! I know."
-  alias service="brew services"
-  alias pd="prlctl"
-  alias mysql="/Applications/phpstudy/Extensions/MySQL5.7.28/bin/mysql"
-  alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
-  alias sed="gsed"
-  alias wsl="ssh ybw@cpu -p 22222"
-  alias wifi='/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
-  alias code-wsl-pwn="code --remote ssh-remote+wsl /home/ybw/pwn"
-  alias sm="open -a ShareMouse"
-  alias sm_restart="killall ShareMouse && open -a ShareMouse"
-  alias qq="ka QQ; open -a QQ"
-  alias clash="ka ClashX; open -a ClashX"
-  alias trending="~/apps_docker/github_trending/run.sh"
-  alias disable_sleep="sudo pmset -b sleep 0; sudo pmset -b disablesleep 1"
-  alias enable_sleep="sudo pmset -b sleep 1; sudo pmset -b disablesleep 0"
-  # check sleep status
-  a=$(sudo pmset -g custom | egrep -c '^\ sleep.*0$')
-  if [ $a = 2 ]; then 
-    echo "warning: you are keeping sleep disabled, which is dangerous!"
-    echo "use 'disable_sleep' to stop it."
-  fi
-  function cpu_host_update(){
-    # set host for {cpu}(my windows)
-    if [ $1 ]; then
-      sudo gsed -i "s/.*cpu/$1 cpu/g" /etc/hosts
-    elif [ $1 -a $1 = "--help" ]; then
-      echo "useage: cpu_host_update <hostname>"
-      echo "you can use `cpu_host_update $(sudo find_cpu)` to update automatically."
-    else
-      default_host="42.192.46.157"
-      sudo gsed -i "s/.*cpu/${default_host} cpu/g" /etc/hosts
-    fi
-  }
-  function push-wsl(){
-    if [[ $1 ]]; then new_file=$1; else new_file=$HOME'/Downloads/'$(ls -t ~/Downloads | sed -n "1p"); fi
-    scp -P 22222 $new_file ybw@cpu:~/pwn/.target
-    # scp -P 22222 $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
-  }
-  # cpu_host_update
+  plugins+=(darwin)
 elif [[ $UNAME =~ "WSL2" ]]; then
-  __conda="$HOME/.miniconda"
-  user="/mnt/c/Users/27564"
-  desktop="$user/Desktop"
-  downloads="$user/Downloads"
-  echo "U are using WSL2! I know."
-  export PATH=/mnt/c/Windows/System32:$PATH
-  alias ggg="gaa && gcmsg '..' && /mnt/c/Program\ Files/Git/cmd/git.exe push"
-  alias pwncp="cp $desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
-  alias sm="/mnt/c/Program\ Files\ \(x86\)/ShareMouse/ShareMouse.exe &"
-  alias sm_restart="taskkill.exe /IM Share\* /F && sm"
-  alias ida-x64="/mnt/c/pwntools/ida75/75ida64.exe -i"
-  alias ida-x86="/mnt/c/pwntools/ida75/75ida.exe -i"
-
-  win_ip_lan=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
-  win_ip=$(ip route show | sed -n "1p" | awk -F" " '{print $3}') # 对应win的wsl虚拟网卡的ip
-
-  function pfdwin2wsl(){
-    # 访问win的时候被转发到wsl, 需要先执行wsl hosts, 更新wsl的ip
-    if [ $1 = "--help" ]; then
-      echo "pfdwin2wsl <win_port> <wsl_port>" 
-    elif [ $1 = "--reset" ]; then
-      netsh.exe interface portproxy reset > /dev/null
-    elif [ $1 = "--show" ]; then
-      netsh.exe interface portproxy show all
-    elif [ $1 -a $2 ]; then
-      netsh.exe interface portproxy add v4tov4 listenaddress=${win_ip_lan} listenport=$1 connectaddress=wsl.local connectport=$2 > /dev/null
-    elif [ $1 ]; then
-      netsh.exe interface portproxy add v4tov4 listenaddress=${win_ip_lan} listenport=$1 connectaddress=wsl.local connectport=$1 > /dev/null
-    fi
-  }
-
-  function pfdwsl2win(){
-    # 访问wsl的时候被转发到win
-    ## 每次win开机启动一次就行
-    # make sure you have run `sudo echo 1 > /proc/sys/net/ipv4/ip_forward` in the root mode
-    sudo bash -c "sudo echo 1 > /proc/sys/net/ipv4/ip_forward" # it'll be reset to '0' when reboot windows
-    sudo iptables -t nat -F
-    sudo iptables -t nat -A POSTROUTING -j MASQUERADE
-    sudo iptables -t nat -A PREROUTING -p tcp -m tcp --dport 3389 -j DNAT --to-destination $win_ip:3389
-    # 还要把wsl的22222转发到wsl的22
-    sudo iptables -t nat -A PREROUTING -p tcp --dport 22222 -j REDIRECT --to-port 22
-  }
-
-  function wsl_hosts(){
-    ### win每次开机时 wsl的ip和win上面的虚拟网卡都不一样
-    ## 每次win开机的时候启动一次就行
-    # 把wsl的ip添加到windows的host里面->让ida能够轻松的debug
-    hosts="/mnt/c/Windows/System32/drivers/etc/hosts"
-    ip=$(ip add | grep inet | grep eth0 | awk -F" " '{print $2}' | cut -d"/" -f 1)
-    echo -n "wsl ip: $ip | "
-    aoc "wsl.local" "$ip wsl.local" "$hosts"
-  }
-  function load(){
-    if [[ $(service $1 status | grep not) ]];then sudo service $1 start;echo "$1 just started";else echo "$1 is already running";fi
-  }
-
-  # wsl_hosts $win_ip_lan
-  load ssh
-  ~/apps/npc/npc.sh # start npc service if it's not running
-  ~/apps/nebula/nebula.sh # start nebula service if it's not running
-  ~/apps/identifier/identifier.sh # start identifier service if it's not running
+  plugins+=(wsl)
 elif [[ $UNAME =~ "Android" ]]; then
   echo "U are using Android! I know"
   sshd
-
 else
   __conda="$HOME/.miniconda"
 fi
+# >>>
 
 # key bindings
 bindkey \^U backward-kill-line
 
 if [ -e "$ZSH/themes/ybw-ys.zsh-theme" ]; then ZSH_THEME="ybw-ys"; else ZSH_THEME="ys"; fi
 
-plugins=(git
-gitignore
-macos
-cp
-gitignore
-colored-man-pages
-extract
-sudo
-zsh-autosuggestions
-zsh-syntax-highlighting
-autojump
-docker
-docker-compose
+plugins+=(
+  git
+  gitignore
+  macos
+  cp
+  gitignore
+  colored-man-pages
+  extract
+  sudo
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  autojump
+  docker
+  docker-compose
 )
 	
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
@@ -267,4 +97,3 @@ function nvm_init(){
   # <<< nvm initialize <<<
 }
 conda_init; nvm_init
-

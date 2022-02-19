@@ -1,0 +1,10 @@
+alias proxyoff="export https_proxy='' http_proxy='' all_proxy=''"
+alias proxyon="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890"
+alias http_proxy="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890"
+alias burp_proxy="export https_proxy=http://127.0.0.1:8080 http_proxy=http://127.0.0.1:8080"
+alias pon="proxyon"
+alias poff="proxyoff"
+alias pchain="proxychains4"
+alias google="curl google.com"
+alias baidu="curl baidu.com"
+alias ipip='echo "public IP addr: $(curl -s http://myip.ipip.net)"'
