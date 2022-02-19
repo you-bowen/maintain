@@ -2,6 +2,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 ### ybw
+.DS_Store
 private.py
 ### Python ###
 # Byte-compiled / optimized / DLL files

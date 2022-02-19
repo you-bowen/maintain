@@ -17,3 +17,16 @@ if sys.argv[2:] == []:
 else:
     new_name = sys.argv[2]
 source.to_file(new_name)
+
+""" curl request like this:
+POST /shrink HTTP/1.1
+Host: api.tinify.com
+Authorization: Basic xxxxxxxxxxx
+User-Agent: curl/7.77.0
+Accept: */*
+Content-Length: 12345
+Content-Type: application/x-www-form-urlencoded
+Connection: close
+
+qweqwasdasdaxzxczxcassdasd...
+"""

@@ -1,0 +1,30 @@
+#!/usr/local/bin/python3
+from multiping import MultiPing
+# multiping from https://www.github.com/you-bowen/multiping
+import asyncio
+import socket
+from ping3 import ping
+import os
+
+wsl = None
+
+def identify(target, timeout=1):
+    """make socket connection to target and identify"""
+    global wsl
+    try:
+        s = socket.create_connection(address=(target, 2022), timeout=timeout)
+        data = s.recv(1024)
+        if "this is wsl" in data.decode():
+            wsl = target
+    except Exception as error:
+        # print(f"{target}: {error}")
+        return None
+
+mp = MultiPing([f"192.168.1.{i}" for i in range(2,255)])
+mp.send()
+responses, no_responses = mp.receive(1)
+alive = list(responses.keys())
+# print(alive)
+[identify(i,0.8) for i in alive]
+print(wsl)
+

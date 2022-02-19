@@ -1,6 +1,8 @@
 export ZSH="$HOME/.oh-my-zsh"
 UNAME=$(uname -a)
 # global_variables
+export PATH=$HOME/maintain/tools:$HOME/pwn/tools:$PATH
+export PATH=$PATH:$HOME/.pkg_uninstaller
 export GITHUB_USER="you-bowen"
 # docker
 alias dk-r="docker run"
@@ -10,7 +12,7 @@ alias dk-bt="docker build -t"
 alias dk-rmit="docker run --rm -it"
 alias dk-rmit-cache="docker run --rm -it -v ~/misc/apt-cache-cqupt:/var/lib/apt/lists"
 alias dk-c="docker-compose"
-alias dk-show-net="docker inspect --format='{{.Name}} - {{.HostConfig.NetworkMode}} - {{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)"
+alias dk-show-net="docker inspect --format='{{.Name}} - {{.HostConfig.NetworkMode}} - {{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' \$(docker ps -aq)"
 function dk-c-build-up(){ docker-compose -f $1 build && docker-compose -f $1 up }
 # iot
 alias webrepl="python3 ~/apps/webrepl/webrepl_cli.py -p '900900'"
@@ -28,13 +30,7 @@ alias google="curl google.com"
 alias baidu="curl baidu.com"
 alias ipip='echo "public IP addr: $(curl -s http://myip.ipip.net)"'
 alias tarAfromB="tar cfzv $1 $2"
-function ipof(){
-  ping $1 -c 1 | sed -n "1p" | cut -d '(' -f2|cut -d ')' -f1;
-}
-function host_alive(){
-  a=$(ping $1 -c 1 -t 1 | grep "1 packets received")
-  if [[ $a ]]; then echo "alive";fi
-}
+
 # apps
 alias nebula="sudo ~/apps/nebula/nebula -config /etc/nebula/config.yaml > ~/log/nebula.log 2>&1 &"
 alias nebula_restart="sudo kill -9 \$(pgrep nebula); nebula"
@@ -127,27 +123,24 @@ if [[ $UNAME =~ "Darwin" ]]; then
     echo "warning: you are keeping sleep disabled, which is dangerous!"
     echo "use 'disable_sleep' to stop it."
   fi
-  function cpu_host(){
-    # set host for {cpu}(my windows)
-    sudo gsed -i "s/.*cpu/$1 cpu/g" /etc/hosts;
-  }
-
   function cpu_host_update(){
-    # wifi_name=$(wifi -I| awk -F: '/ SSID/{print $2}' | sed 's/^[ \t]*//g')
-    if [[ -z $(host_alive 192.168.100.3) ]]; then 
-      cpu_host "42.192.46.157"; 
-      echo -n "cpu not alive | ";
+    # set host for {cpu}(my windows)
+    if [ $1 ]; then
+      sudo gsed -i "s/.*cpu/$1 cpu/g" /etc/hosts
+    elif [ $1 -a $1 = "--help" ]; then
+      echo "useage: cpu_host_update <hostname>"
+      echo "you can use `cpu_host_update $(sudo find_cpu)` to update automatically."
     else
-      cpu_host "192.168.100.3";
+      default_host="42.192.46.157"
+      sudo gsed -i "s/.*cpu/${default_host} cpu/g" /etc/hosts
     fi
-    echo "host {cpu} updated"
   }
   function push-wsl(){
     if [[ $1 ]]; then new_file=$1; else new_file=$HOME'/Downloads/'$(ls -t ~/Downloads | sed -n "1p"); fi
     scp -P 22222 $new_file ybw@cpu:~/pwn/.target
     # scp -P 22222 $1 ybw@cpu:/mnt/c/Users/27564/Desktop/pwnfiles
   }
-  cpu_host_update
+  # cpu_host_update
 elif [[ $UNAME =~ "WSL2" ]]; then
   __conda="$HOME/.miniconda"
   user="/mnt/c/Users/27564"
@@ -158,19 +151,28 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   alias ggg="gaa && gcmsg '..' && /mnt/c/Program\ Files/Git/cmd/git.exe push"
   alias pwncp="cp $desktop/pwnfiles/* ~/pwn/target && chmod a+x ~/pwn/target/*"
   alias sm="/mnt/c/Program\ Files\ \(x86\)/ShareMouse/ShareMouse.exe &"
-  alias sm_restart="taskkill.exe /IM  Share\* && sm"
+  alias sm_restart="taskkill.exe /IM Share\* /F && sm"
   alias ida-x64="/mnt/c/pwntools/ida75/75ida64.exe -i"
   alias ida-x86="/mnt/c/pwntools/ida75/75ida.exe -i"
 
   win_ip_lan=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
   win_ip=$(ip route show | sed -n "1p" | awk -F" " '{print $3}') # 对应win的wsl虚拟网卡的ip
+
   function pfdwin2wsl(){
     # 访问win的时候被转发到wsl, 需要先执行wsl hosts, 更新wsl的ip
-    # show: netsh interface portproxy show all
-    netsh.exe interface portproxy reset > /dev/null
-    netsh.exe interface portproxy add v4tov4 listenaddress=$1 listenport=22222 connectaddress=wsl.local connectport=22 > /dev/null
-    netsh.exe interface portproxy add v4tov4 listenaddress=$1 listenport=23946 connectaddress=wsl.local connectport=23946 > /dev/null
+    if [ $1 = "--help" ]; then
+      echo "pfdwin2wsl <win_port> <wsl_port>" 
+    elif [ $1 = "--reset" ]; then
+      netsh.exe interface portproxy reset > /dev/null
+    elif [ $1 = "--show" ]; then
+      netsh.exe interface portproxy show all
+    elif [ $1 -a $2 ]; then
+      netsh.exe interface portproxy add v4tov4 listenaddress=${win_ip_lan} listenport=$1 connectaddress=wsl.local connectport=$2 > /dev/null
+    elif [ $1 ]; then
+      netsh.exe interface portproxy add v4tov4 listenaddress=${win_ip_lan} listenport=$1 connectaddress=wsl.local connectport=$1 > /dev/null
+    fi
   }
+
   function pfdwsl2win(){
     # 访问wsl的时候被转发到win
     ## 每次win开机启动一次就行
@@ -191,18 +193,6 @@ elif [[ $UNAME =~ "WSL2" ]]; then
     ip=$(ip add | grep inet | grep eth0 | awk -F" " '{print $2}' | cut -d"/" -f 1)
     echo -n "wsl ip: $ip | "
     aoc "wsl.local" "$ip wsl.local" "$hosts"
-
-    # 把win的ip加入到wsl的host里面，如果局域网ip变了就重新进行端口转发，端口转发是为了通过win访问wsl
-    # hosts="/etc/hosts"
-    # echo -n "win ip: $1 | "
-    # win_ip_not_change=$(cat $hosts | grep "$1 win.local")
-    # if [ $win_ip_not_change ]; then 
-    #   echo "not changed."
-    # else
-    #   echo "Forwarding..."
-    #   aoc "win.local" "$1 win.local" "$hosts"
-    #   pfdwin2wsl $1
-    # fi
   }
   function load(){
     if [[ $(service $1 status | grep not) ]];then sudo service $1 start;echo "$1 just started";else echo "$1 is already running";fi
@@ -212,6 +202,7 @@ elif [[ $UNAME =~ "WSL2" ]]; then
   load ssh
   ~/apps/npc/npc.sh # start npc service if it's not running
   ~/apps/nebula/nebula.sh # start nebula service if it's not running
+  ~/apps/identifier/identifier.sh # start identifier service if it's not running
 elif [[ $UNAME =~ "Android" ]]; then
   echo "U are using Android! I know"
   sshd
@@ -225,7 +216,6 @@ bindkey \^U backward-kill-line
 
 if [ -e "$ZSH/themes/ybw-ys.zsh-theme" ]; then ZSH_THEME="ybw-ys"; else ZSH_THEME="ys"; fi
 
-
 plugins=(git
 gitignore
 macos
@@ -235,7 +225,6 @@ colored-man-pages
 extract
 sudo
 zsh-autosuggestions
-# zsh-autocomplete
 zsh-syntax-highlighting
 autojump
 docker
@@ -268,7 +257,6 @@ function conda_init(){
   unset __conda_setup
   # <<< conda initialize <<<
 }
-
 function nvm_init(){
   # >>> nvm initialize >>>
   if [ -d "$HOME/.nvm" ]; then
@@ -278,6 +266,5 @@ function nvm_init(){
   fi
   # <<< nvm initialize <<<
 }
+conda_init; nvm_init
 
-export PATH=$HOME/maintain/tools:$HOME/pwn/tools:$PATH
-export PATH=$PATH:$HOME/.pkg_uninstaller
