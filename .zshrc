@@ -46,6 +46,7 @@ bindkey \^U backward-kill-line
 if [ -e "$ZSH/themes/ybw-ys.zsh-theme" ]; then ZSH_THEME="ybw-ys"; else ZSH_THEME="ys"; fi
 
 plugins+=(
+  aliases
   git
   gitignore
   macos

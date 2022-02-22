@@ -31,11 +31,11 @@ if [ $a = 2 ]; then
 fi
 function cpu_host_update(){
     # set host for {cpu}(my windows)
-    if [ $1 ]; then
-        sudo gsed -i "s/.*cpu/$1 cpu/g" /etc/hosts
-    elif [ $1 -a $1 = "--help" ]; then
+    if [ $1 -a $1 = "--help" ]; then
         echo "useage: cpu_host_update <hostname>"
         echo "you can use `cpu_host_update $(sudo find_cpu)` to update automatically."
+    elif [ $1 ]; then 
+        sudo gsed -i "s/.*cpu/$1 cpu/g" /etc/hosts
     else
         default_host="42.192.46.157"
         sudo gsed -i "s/.*cpu/${default_host} cpu/g" /etc/hosts
