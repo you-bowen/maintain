@@ -65,6 +65,7 @@ wsl_hosts # 在win中记录wsl的ip
 pfdwin2wsl --reset
 pfdwin2wsl 22222 22
 pfdwin2wsl 23946
+pfdwin2wsl 2022
 
 pfdwsl2win
 
