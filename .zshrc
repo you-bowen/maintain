@@ -3,12 +3,15 @@ export ZSH="$HOME/.oh-my-zsh"
 export PATH=$HOME/maintain/tools:$HOME/pwn/tools:$PATH
 export PATH=$PATH:$HOME/.pkg_uninstaller
 export GITHUB_USER="you-bowen"
+# ipython opens $EDITOR when press `v` or `F2`
+export EDITOR=vim
 plugins+=(
   dk    # docker
   iot   # iot
   ctf   # ctf
   ops   # 一些比较基础、通用的运维操作
   proxy # 代理相关
+  leecode # leecode 笔记快速创建
 )
 alias nebula="sudo ~/apps/nebula/nebula -config /etc/nebula/config.yaml > ~/log/nebula.log 2>&1 &"
 alias nebula_restart="sudo kill -9 \$(pgrep nebula); nebula"
@@ -16,6 +19,9 @@ alias maintain="cd ~/maintain && clash && pon && sleep 0.3 && git pull && ka cla
 alias twrp="fastboot flash recovery $1"
 alias hhh="hexo clean && hexo g && hexo s"
 alias wnb="watch -n 1 nbtest"
+alias i="ipython --profile=ybw"
+alias p3="python3"
+alias p2="python2"
 
 function clash(){
   if [ $(pgrep clash) ]; then 
@@ -98,3 +104,5 @@ function nvm_init(){
   # <<< nvm initialize <<<
 }
 conda_init; nvm_init
+# tabby sftp support
+precmd () { echo -n "\x1b]1337;CurrentDir=$(pwd)\x07" }

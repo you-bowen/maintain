@@ -13,6 +13,7 @@ alias k9="sudo kill -9"
 alias ka="sudo killall"
 alias history_fix="mv ~/.zsh_history ~/.zsh_history_bad && strings ~/.zsh_history_bad > ~/.zsh_history && fc -R ~/.zsh_history"
 alias lt="ls -t"
+# 一件创建仓库，进行初始化，需要你的目录名 == 仓库名
 alias grepo="git init && \
             gaa && gcmsg '..' && \
             gb -M main && \

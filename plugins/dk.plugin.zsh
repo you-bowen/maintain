@@ -1,4 +1,5 @@
 # here is shortcut commands for docker 
+alias dk="docker"
 alias dk-r="docker run"
 alias dk-b="docker build"
 alias dk-p="docker pull"
