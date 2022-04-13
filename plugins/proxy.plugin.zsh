@@ -6,6 +6,7 @@ alias pchain="proxychains4"
 alias google="curl google.com"
 alias baidu="curl baidu.com"
 alias ipip='echo "public IP addr: $(curl -s http://myip.ipip.net)"'
+alias pong="pon && google"
 function 3px(){
     # only one arg -> 127.0.0.1
     poff

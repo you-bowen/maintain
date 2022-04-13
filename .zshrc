@@ -22,7 +22,9 @@ alias wnb="watch -n 1 nbtest"
 alias i="ipython --profile=ybw"
 alias p3="python3"
 alias p2="python2"
-
+function codej(){
+  j $1 && code .
+}
 function clash(){
   if [ $(pgrep clash) ]; then 
     echo 'clash is running';
