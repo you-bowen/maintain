@@ -24,6 +24,7 @@ alias trending="~/apps_docker/github_trending/run.sh"
 alias disable_sleep="sudo pmset -b sleep 0; sudo pmset -b disablesleep 1"
 alias enable_sleep="sudo pmset -b sleep 1; sudo pmset -b disablesleep 0"
 alias md="open -a Mark\ Text"
+alias txt="open -a TextEdit.app"
 # check sleep status
 a=$(sudo pmset -g custom | egrep -c '^\ sleep.*0$')
 if [ $a = 2 ]; then 

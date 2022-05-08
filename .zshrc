@@ -1,3 +1,5 @@
+# Fig pre block. Keep at the top of this file.
+. "$HOME/.fig/shell/zshrc.pre.zsh"
 plugins=()
 export ZSH="$HOME/.oh-my-zsh"
 export PATH=$HOME/maintain/tools:$HOME/pwn/tools:$PATH
@@ -22,6 +24,7 @@ alias wnb="watch -n 1 nbtest"
 alias i="ipython --profile=ybw"
 alias p3="python3"
 alias p2="python2"
+
 function codej(){
   j $1 && code .
 }
@@ -108,3 +111,6 @@ function nvm_init(){
 conda_init; nvm_init
 # tabby sftp support
 precmd () { echo -n "\x1b]1337;CurrentDir=$(pwd)\x07" }
+
+# Fig post block. Keep at the bottom of this file.
+. "$HOME/.fig/shell/zshrc.post.zsh"

@@ -5,15 +5,24 @@ import binascii as ba
 import IPython
 import base64
 import requests as r
-from collections import *
+import collections
+import functools
+import itertools
 import math
 import re
 j = os.path.join
 py = IPython.get_ipython()
 py.Completer.use_jedi = False
 
-def matrix():
+def c_mn(m, n):
+    """calc c(m, n) value
+
+    Args:
+        m (int): big num
+        n (int): small num
     """
-    create a matrix, which have m_rows n_cols
-    """
-    print("[[0]*(n) for _ in range(m)]")
+    if m-n < n: n = m-n
+    molecule, denominator = 1, 1
+    for i in range(m, m-n, -1): molecule *= i
+    for i in range(2, n+1): denominator *= i
+    return molecule//denominator    

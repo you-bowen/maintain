@@ -1,0 +1,13 @@
+#!/usr/local/bin/python
+import AppKit
+import os
+
+board = AppKit.NSPasteboard.generalPasteboard()
+types = board.types()
+data = [board.dataForType_(i) for i in types]
+content_view = data[0].bytes()
+pic_raw = content_view.tobytes()
+with open(f"{os.environ['HOME']}/test.png", "wb") as f:
+    f.write(pic_raw)
+
+os.system(f"qlmanage -p {os.environ['HOME']}/test.png")
