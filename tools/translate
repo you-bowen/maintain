@@ -1,9 +1,0 @@
-#!/usr/local/bin/python3
-import sys
-from googletrans import Translator
-
-# 注意：一开始的translate是pip安装的
-# 用which找到它并删除吧
-translator = Translator()
-tranlated = translator.translate(sys.stdin.read(), dest='zh-CN')
-print(tranlated.text)

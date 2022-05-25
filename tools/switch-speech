@@ -1,0 +1,12 @@
+#!/bin/bash
+
+k="com.apple.speech.recognition.AppleSpeechRecognition.prefs DictationIMNetworkBasedLocaleIdentifier"
+res=`defaults read $k`
+if [[ $res == en_US ]]; then
+  defaults write $k zh_CN
+  echo "set to zh_CN"
+else
+  defaults write $k en_US 
+  echo "set to en_US"
+fi
+killall -HUP DictationIM > /dev/null 2>&1

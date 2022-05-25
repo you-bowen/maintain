@@ -1,0 +1,16 @@
+#!/usr/local/bin/python
+import os
+import sys
+def sudo(x): return os.system('sudo ' + x)
+
+
+commands = sys.argv[1:]
+
+sudo("date $(date -j -f %s $((`date +%s`-315360000)) +%m%d%H%M%Y.%S) >/dev/null 2>&1;")
+try:
+    cmd = f"prlctl {' '.join(commands)}"
+    os.system(cmd)
+except:
+    print("Error")
+sudo("date $(date -j -f %s $((`date +%s`+315360000)) +%m%d%H%M%Y.%S) >/dev/null 2>&1")
+sudo("sntp -sS time.apple.com >/dev/null 2>&1")

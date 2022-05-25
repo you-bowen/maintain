@@ -1,0 +1,23 @@
+#!/usr/local/bin/python3
+import sys
+from googletrans import Translator
+import pyperclip
+# 注意：一开始的translate是pip安装的
+# 用which找到它并删除吧
+
+
+def is_Chinese(word):
+    for ch in word:
+        if '\u4e00' <= ch <= '\u9fff':
+            return True
+    return False
+
+
+translator = Translator()
+if len(sys.argv) >= 2:
+    input_text = " ".join(sys.argv[1:])
+else:
+    input_text = pyperclip.paste()
+dest = "en" if is_Chinese(input_text) else "zh-CN"
+translated = translator.translate(input_text, dest=dest)
+print(translated.text)
