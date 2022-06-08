@@ -1,0 +1,18 @@
+#!/usr/local/bin/python3
+
+import subprocess
+import os
+import webbrowser
+"""
+cd ~/repos/bili_up_manage && python3 server.py & 
+cd ~/repos/bili_up_manage_front/dist && python3 -m http.server 8008
+"""
+home = os.environ['HOME']
+proc1 = subprocess.Popen(['python3', 'server.py',], cwd=f"{home}/repos/bili_up_manage")
+proc2 = subprocess.Popen(['python3', '-m', 'http.server', '8008',], cwd=f"{home}/repos/bili_up_manage_front/dist")
+
+print(proc1.pid, proc2.pid)
+webbrowser.open("http://localhost:8008/")
+
+proc1.wait()
+proc2.wait()

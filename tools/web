@@ -1,0 +1,79 @@
+#!/usr/local/bin/python3
+
+
+import webbrowser
+import click
+
+@click.group()
+def cli():
+    pass
+
+docs = {
+    "fastapi": {
+        "cn": "https://fastapi.tiangolo.com/zh/",
+        "en": "https://fastapi.tiangolo.com"
+    },
+    "django": {
+        "cn":"https://docs.djangoproject.com/zh-hans/4.0/",
+        "en":"https://docs.djangoproject.com/en/4.0/"
+    },
+    "quasar": {
+        "cn": "https://quasar.dev/",
+        "en": "https://quasar.dev/"
+    },
+    "nuxt": {
+        "cn": "https://v3.nuxtjs.org/",
+        "en": "https://v3.nuxtjs.org/",
+    },  
+    "angular": {
+        "cn": "https://angular.cn/docs",
+        "en": "https://angular.io/docs"
+    },
+    "click": {
+        "cn": "https://click.palletsprojects.com/en/8.1.x/",
+        "en": "https://click.palletsprojects.com/en/8.1.x/",
+    },
+    "vue": {
+        "cn": "https://v3.cn.vuejs.org/",
+        "en": "https://vuejs.org/"
+    },
+    "tortoise": {
+        "cn": "https://tortoise.github.io/",
+        "en": "https://tortoise.github.io/"
+    }
+}
+
+
+onlineTools = {
+    "doc":  "https://docs.google.com/document/u/0/",
+    "ppt":  "https://docs.google.com/presentation/u/0/",
+    "excel":"https://docs.google.com/spreadsheets/u/0/",
+    "pdf":  "https://smallpdf.com/pdf-reader",
+    "apifox": "https://www.apifox.cn/web/main",
+}
+
+@click.command()
+@click.option('-cn/-en', default=True, help='language')
+@click.argument('keyword')
+def doc(keyword, cn):
+    lang = "cn" if cn else "en"
+    if keyword in docs.keys():
+        url = docs[keyword][lang]
+        webbrowser.open(url)
+    else:
+        print("not in record")
+
+@click.command()
+@click.argument('keyword')
+def x(keyword):
+    if keyword in onlineTools.keys():
+        url = onlineTools[keyword]
+        webbrowser.open(url)
+    else:
+        print("not in record")
+
+cli.add_command(doc)
+cli.add_command(x)
+
+if __name__ == '__main__':
+    cli()

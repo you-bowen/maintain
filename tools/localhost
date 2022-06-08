@@ -1,4 +1,12 @@
 #!/usr/local/bin/python
 import webbrowser
 import sys
-webbrowser.open(f"http://localhost:{sys.argv[1]}")
+
+def parsePort(port: str):
+    if port == "":
+        return "80"
+    elif port.endswith("k"):
+        return str(int(port[:-1]) * 1000)
+port = sys.argv[1]
+port = parsePort(port)
+webbrowser.open(f"http://localhost:{port}")

@@ -1,23 +1,52 @@
 #!/usr/local/bin/python3
-import sys
 from googletrans import Translator
+from matplotlib.pyplot import flag
 import pyperclip
-# 注意：一开始的translate是pip安装的
-# 用which找到它并删除吧
+import argparse
+import re
+# For lazy support  
+from Pinyin2Hanzi import DefaultHmmParams
+from Pinyin2Hanzi import viterbi
+
+parser = argparse.ArgumentParser()
+parser.add_argument('content', nargs='*', default="")
+parser.add_argument('-p','--pinyin', action="store_true", default=False)
+args = parser.parse_args()
+
+
+# https://github.com/letiantian/Pinyin2Hanzi
+def pinyin2word(array):
+    # you need to convert `xue` -> `xve`, because `xue` is not a valid pinyin
+    hmmparams = DefaultHmmParams()
+    result = viterbi(
+        hmm_params=hmmparams, 
+        observations=array, 
+        path_num = 1
+    )[0].path
+    result = "".join(result)
+    return result
 
 
 def is_Chinese(word):
+    if '.' in word:
+        return True
     for ch in word:
         if '\u4e00' <= ch <= '\u9fff':
             return True
     return False
 
 
+
 translator = Translator()
-if len(sys.argv) >= 2:
-    input_text = " ".join(sys.argv[1:])
-else:
+if not args.content:
     input_text = pyperclip.paste()
-dest = "en" if is_Chinese(input_text) else "zh-CN"
+else:
+    if args.pinyin:
+        dest = "en"
+        input_text = pinyin2word(args.content)
+        print(input_text)
+    else:
+        input_text = " ".join(args.content)
+        dest = "en" if is_Chinese(input_text) else "zh-CN"
 translated = translator.translate(input_text, dest=dest)
 print(translated.text)

@@ -10,4 +10,3 @@ c.InteractiveShell.show_rewritten_input = False
 c.TerminalInteractiveShell.editing_mode = "vi"
 c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 c.TerminalInteractiveShell.editor = 'vim'   # 输入`%ed`来打开vim编辑
-c.TerminalInteractiveShell.auto_match = True

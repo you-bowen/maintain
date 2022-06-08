@@ -39,6 +39,11 @@ elif is_linux:
 else:
     path = r'C:\Users\{}\AppData\Roaming\Code\User\snippets\{}.json'.format(os.getlogin(), lang)
 
+if not os.path.exists(path):
+    # create file
+    with open(path, 'w') as f:
+        f.write('{}')
+
 try:
     print(path)
     with open(path) as f:

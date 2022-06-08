@@ -1,4 +1,5 @@
 plugins=()
+# TODO: https://thevaluable.dev/zsh-completion-guide-examples/
 export ZSH="$HOME/.oh-my-zsh"
 export PATH=$HOME/maintain/tools:$HOME/pwn/tools:$PATH
 export PATH=$PATH:$HOME/.pkg_uninstaller
@@ -12,6 +13,7 @@ plugins+=(
     ops   # 一些比较基础、通用的运维操作
     proxy # 代理相关
     leecode # leecode 笔记快速创建
+    spaceVim
 )
 alias open="open -a"
 alias nebula="sudo ~/apps/nebula/nebula -config /etc/nebula/config.yaml > ~/log/nebula.log 2>&1 &"
@@ -24,6 +26,8 @@ alias i="ipython --profile=ybw"
 alias p3="python3"
 alias p2="python2"
 alias emulator="~/Library/Android/sdk/emulator"
+alias tr="trans"
+alias lo="localhost"
 
 function codej(){
     j $1 && code .

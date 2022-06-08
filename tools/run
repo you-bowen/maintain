@@ -1,0 +1,13 @@
+#!/usr/local/bin/python3
+import os
+import sys
+
+
+filename = sys.argv[1]
+
+if filename.endswith('.py'):
+    os.system(f"python3 {filename}")
+elif filename.endswith('.c'):
+    os.system(f"gcc {filename} -o {filename.split('.')[0]} && ./{filename.split('.')[0]} && rm {filename.split('.')[0]}")
+elif filename.endswith('.js'):
+    os.system(f"node {filename}")

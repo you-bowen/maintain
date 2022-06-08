@@ -17,7 +17,7 @@ alias lt="ls -t"
 alias grepo="git init && \
             gaa && gcmsg '..' && \
             gb -M main && \
-            git remote add origin https://github.com/$GITHUB_USER/${PWD##*/}.git && \
+            gr add origin https://github.com/$GITHUB_USER/${PWD##*/}.git && \
             gp -u origin main"
 
 
@@ -30,6 +30,6 @@ function ssl_cert_install(){
     --key-file       $2/key.pem  \
     --fullchain-file $2/fullchain.pem \
 }
-function killport(){
-    kill -9 $(lsof -i:$1 | sed -n "2p" | cut -d " " -f 2)
+function killport(){ 
+    lsof -i TCP:$1 | grep LISTEN | awk '{print $2}' | xargs kill -9 
 }
