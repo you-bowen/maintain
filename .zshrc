@@ -28,7 +28,8 @@ alias p2="python2"
 alias emulator="~/Library/Android/sdk/emulator"
 alias tr="trans"
 alias lo="localhost"
-
+alias cs="changeSource"
+alias binwalk='docker run --rm -v "$PWD":"/root" binwalk'
 function codej(){
     j $1 && code .
 }
@@ -59,7 +60,6 @@ fi
 bindkey \^U backward-kill-line
 
 if [ -e "$ZSH/themes/ybw-ys.zsh-theme" ]; then ZSH_THEME="ybw-ys"; else ZSH_THEME="ys"; fi
-
 plugins+=(
     aliases
     git
@@ -73,6 +73,7 @@ plugins+=(
     zsh-autosuggestions
     zsh-syntax-highlighting
     autojump
+    you-should-use
     docker
     docker-compose
     web-search

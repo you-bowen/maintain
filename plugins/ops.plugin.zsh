@@ -13,12 +13,15 @@ alias k9="sudo kill -9"
 alias ka="sudo killall"
 alias history_fix="mv ~/.zsh_history ~/.zsh_history_bad && strings ~/.zsh_history_bad > ~/.zsh_history && fc -R ~/.zsh_history"
 alias lt="ls -t"
-# 一件创建仓库，进行初始化，需要你的目录名 == 仓库名
-alias grepo="git init && \
-            gaa && gcmsg '..' && \
-            gb -M main && \
-            gr add origin https://github.com/$GITHUB_USER/${PWD##*/}.git && \
-            gp -u origin main"
+# 一键创建仓库，进行初始化，需要指定仓库名
+function grepo(){
+    git init
+    git add .
+    git commit -m'..'
+    git branch -M main
+    git remote add origin https://github.com/$GITHUB_USER/$1.git
+    git push -u origin main
+}
 
 
 function code--(){
