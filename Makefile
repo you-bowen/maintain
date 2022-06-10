@@ -1,2 +1,4 @@
 install:
-	python3 plugins/install.py
+	ln -sf ~/maintain/misc/*.zsh-theme ~/.oh-my-zsh/themes
+	python3 scripts/install_plugins.py
+
