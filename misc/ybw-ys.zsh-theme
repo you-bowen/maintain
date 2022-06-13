@@ -62,7 +62,11 @@ proxy_prompt() {
     if [ "$http_proxy" != "" ]; then cnt+=1 fi
     if [ "$https_proxy" != "" ]; then cnt+=1 fi
     if [ "$all_proxy" != "" ]; then cnt+=1 fi
-    echo " [${cnt}px]"
+    if [ $cnt -gt 0 ]; then 
+        echo " %{$terminfo[bold]$fg[green]%}[${cnt}px]%{$reset_color%}"; 
+    else 
+        echo " %{$terminfo[bold]$fg[red]%}[${cnt}px]%{$reset_color%}";
+    fi
 }
 # Prompt format:
 #
@@ -76,9 +80,6 @@ proxy_prompt() {
 PROMPT="
 %{$terminfo[bold]$fg[blue]%}#%{$reset_color%} \
 %(#,%{$bg[yellow]%}%{$fg[black]%}%n%{$reset_color%},%{$fg[cyan]%}%n) \
-%{$reset_color%}@ \
-%{$fg[green]%}%m \
-%{$reset_color%}in \
 %{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
 ${hg_info}\
 ${git_info}\

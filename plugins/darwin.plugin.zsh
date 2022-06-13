@@ -25,6 +25,8 @@ alias enable_sleep="sudo pmset -b sleep 1; sudo pmset -b disablesleep 0"
 alias md="open MarkText"
 alias txt="open TextEdit.app"
 alias rm="trash"
+alias binwalk='docker run --rm -v "$PWD":"/root" binwalk'
+
 # check sleep status
 a=$(sudo pmset -g custom | egrep -c '^\ sleep.*0$')
 if [ $a = 2 ]; then

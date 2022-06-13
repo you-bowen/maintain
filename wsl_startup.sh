@@ -2,6 +2,7 @@
 export PATH=/mnt/c/Windows/System32:$PATH
 win_ip_lan=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
 win_ip=$(ip route show | sed -n "1p" | awk -F" " '{print $3}') # 对应win的wsl虚拟网卡的ip
+wsl_ip=$(ip add | grep inet | grep eth0 | awk -F" " '{print $2}' | cut -d"/" -f 1)
 
 function aoc(){
   # add if exist else change (add or change)
@@ -45,10 +46,11 @@ function wsl_hosts(){
     ### win每次开机时 wsl的ip和win上面的虚拟网卡都不一样
     ## 每次win开机的时候启动一次就行
     # 把wsl的ip添加到windows的host里面->让ida能够轻松的debug
-    hosts="/mnt/c/Windows/System32/drivers/etc/hosts"
-    ip=$(ip add | grep inet | grep eth0 | awk -F" " '{print $2}' | cut -d"/" -f 1)
-    echo -n "wsl ip: $ip | "
-    aoc "wsl.local" "$ip wsl.local" "$hosts"
+    local win_hosts="/mnt/c/Windows/System32/drivers/etc/hosts"
+    echo -n "wsl ip: $wsl_ip | "
+    aoc "wsl.local" "$wsl_ip wsl.local" "$win_hosts"
+    # 把win的ip添加到wsl的host里面
+    aoc "win.local" "$win_ip win.local" "/etc/hosts"  
 }
 
 function load(){
@@ -70,6 +72,6 @@ pfdwin2wsl 2022
 pfdwsl2win
 
 load ssh
-~/apps/npc/npc.sh # start npc service if it's not running
-~/apps/nebula/nebula.sh # start nebula service if it's not running
-~/apps/identifier/identifier.sh # start identifier service if it's not running
+# ~/apps/npc/npc.sh # start npc service if it's not running
+# ~/apps/nebula/nebula.sh # start nebula service if it's not running
+# ~/apps/identifier/identifier.sh # start identifier service if it's not running

@@ -13,7 +13,6 @@ plugins+=(
     ops   # 一些比较基础、通用的运维操作
     proxy # 代理相关
     leecode # leecode 笔记快速创建
-    spaceVim
 )
 alias open="open -a"
 alias nebula="sudo ~/apps/nebula/nebula -config /etc/nebula/config.yaml > ~/log/nebula.log 2>&1 &"
@@ -29,7 +28,6 @@ alias emulator="~/Library/Android/sdk/emulator"
 alias tr="trans"
 alias lo="localhost"
 alias cs="changeSource"
-alias binwalk='docker run --rm -v "$PWD":"/root" binwalk'
 function codej(){
     j $1 && code .
 }
