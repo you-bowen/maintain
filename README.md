@@ -7,6 +7,14 @@
 3. 打造优秀的.zshrc
 4. 打造换源脚本
 
+## 一些小技巧
+
+在wsl下面git push比较烦, 可以先 gaa && gcmsg, 中间进行一个alias
+```shell
+alias git="/mnt/c/Program\ Files/Git/cmd/git.exe"
+```
+再进行push
+
 ## 各项目标的进展
 
 ### 装机脚本

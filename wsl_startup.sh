@@ -1,6 +1,6 @@
 #!/bin/bash
 export PATH=/mnt/c/Windows/System32:$PATH
-win_ip_lan=$(ipconfig.exe | grep -a 192.168 | sed "/\.1.$/d"| cut -d ":" -f 2|sed "s/[[:space:]]//g")
+win_ip_lan=$(ipconfig.exe | sed -n '/WLAN/,/IPv4/p' | grep -Eo "([0-9]{1,3}[\.]){3}[0-9]{1,3}")
 win_ip=$(ip route show | sed -n "1p" | awk -F" " '{print $3}') # 对应win的wsl虚拟网卡的ip
 wsl_ip=$(ip add | grep inet | grep eth0 | awk -F" " '{print $2}' | cut -d"/" -f 1)
 

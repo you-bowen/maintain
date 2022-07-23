@@ -7,6 +7,8 @@ def parsePort(port: str):
         return "80"
     elif port.endswith("k"):
         return str(int(port[:-1]) * 1000)
+    else:
+        return port
 port = sys.argv[1]
 port = parsePort(port)
 webbrowser.open(f"http://localhost:{port}")

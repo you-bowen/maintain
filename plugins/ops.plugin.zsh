@@ -1,5 +1,4 @@
 # 运维
-alias tarAfromB="tar cfzv $1 $2"
 alias pmod="sudo chmod a+x *" # power mod
 alias ggg="gaa && gcmsg '..' && gp"
 alias gitback="git reset . && git checkout . && git clean -df" # git back (to origin)
@@ -13,6 +12,11 @@ alias k9="sudo kill -9"
 alias ka="sudo killall"
 alias history_fix="mv ~/.zsh_history ~/.zsh_history_bad && strings ~/.zsh_history_bad > ~/.zsh_history && fc -R ~/.zsh_history"
 alias lt="ls -t"
+function tarf(){
+    local src="$1.tgz"
+    local dst="$1"
+    tar cfzv $src $dst
+}
 # 一键创建仓库，进行初始化，需要指定仓库名
 function grepo(){
     git init

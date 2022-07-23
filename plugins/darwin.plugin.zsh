@@ -8,15 +8,14 @@ __conda="/opt/homebrew/Caskroom/miniconda/base"
 gsed_fail=$(which gsed | grep "found")
 if [ $gsed_fail ];then sed=sed;else sed=gsed;fi
 
+alias down="cd ~/Downloads/"
 alias service="brew services"
 alias mysql="/Applications/phpstudy/Extensions/MySQL5.7.28/bin/mysql"
 alias burp="cd ~/Desktop/BurpSuite2020.12 && nohup ./BURP.sh > /dev/null &"
 alias sed="gsed"
-alias wsl="ssh ybw@cpu -p 22222"
 alias wifi='/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport'
 alias code-wsl-pwn="code --remote ssh-remote+wsl /home/ybw/pwn"
-alias sm="open ShareMouse"
-alias sm_restart="killall ShareMouse && open ShareMouse"
+alias sm="killall ShareMouse; open ShareMouse"
 alias qq="ka QQ; open QQ"
 alias clash="ka ClashX; open ClashX" # already `alias open="open -a" in .zshrc`
 alias trending="~/apps_docker/github_trending/run.sh"

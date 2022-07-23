@@ -1,16 +1,21 @@
 #!/usr/local/bin/python3
 from googletrans import Translator
-from matplotlib.pyplot import flag
 import pyperclip
 import argparse
-import re
-# For lazy support  
+import os
+
+# For lazy support
 from Pinyin2Hanzi import DefaultHmmParams
 from Pinyin2Hanzi import viterbi
 
+# fix the problem that `httpx` can not parse socks5 protocal,
+# we fix the env variable in the script so that we don't need to switch the proxy related env variable
+os.environ["all_proxy"] = ""
+
+
 parser = argparse.ArgumentParser()
-parser.add_argument('content', nargs='*', default="")
-parser.add_argument('-p','--pinyin', action="store_true", default=False)
+parser.add_argument("content", nargs="*", default="")
+parser.add_argument("-p", "--pinyin", action="store_true", default=False)
 args = parser.parse_args()
 
 
@@ -18,23 +23,18 @@ args = parser.parse_args()
 def pinyin2word(array):
     # you need to convert `xue` -> `xve`, because `xue` is not a valid pinyin
     hmmparams = DefaultHmmParams()
-    result = viterbi(
-        hmm_params=hmmparams, 
-        observations=array, 
-        path_num = 1
-    )[0].path
+    result = viterbi(hmm_params=hmmparams, observations=array, path_num=1)[0].path
     result = "".join(result)
     return result
 
 
 def is_Chinese(word):
-    if '.' in word:
+    if "." in word:
         return True
     for ch in word:
-        if '\u4e00' <= ch <= '\u9fff':
+        if "\u4e00" <= ch <= "\u9fff":
             return True
     return False
-
 
 
 translator = Translator()
@@ -48,5 +48,6 @@ else:
     else:
         input_text = " ".join(args.content)
         dest = "en" if is_Chinese(input_text) else "zh-CN"
+
 translated = translator.translate(input_text, dest=dest)
 print(translated.text)

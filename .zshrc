@@ -29,7 +29,7 @@ alias tr="trans"
 alias lo="localhost"
 alias cs="changeSource"
 function codej(){
-    j $1 && code .
+    j $1 && code . && popd
 }
 function clash(){
     if [ $(pgrep clash) ]; then
@@ -77,6 +77,7 @@ plugins+=(
     web-search
 )
 
+DISABLE_AUTO_UPDATE=true
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50
 
